@@ -1,10 +1,27 @@
 class Cost():
 
-    def __init__(self, costs):
-        self.set_costs(costs)
+    def __init__(self):
+        self.costs = list()
 
-    def get_costs(self):
-        return self.costs
+    def get_costs(self, key):
+        try:
+            return self.costs[key]
+        except (TypeError, IndexError):
+            print("No cost with the provided key.")
 
-    def set_costs(self, costs):
-        self.costs = costs.sort()
+    def get_cost(self, key):
+        try:
+            return self.costs[key]
+        except IndexError:
+            print("No value with the key")
+
+    def update_costs(self, key, value):
+        try:
+            if value < 0:
+                print("Enter positive value")
+            else:
+                self.costs[key] = value
+        except IndexError:
+            self.costs.insert(key, value)
+        except TypeError:
+            print("Enter a valid number")
