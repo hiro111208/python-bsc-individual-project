@@ -11,7 +11,8 @@ e3 = resource.Resource("e3")
 # the number of congestions must be equal to the number of players
 player1 = player.Player("Hiro", 1.1)
 player2 = player.Player("Riku", 4)
-player1.set_strategy_set([e1,e2])
+player3 = player.Player("Kosuke", 5)
+#player1.set_strategy_set([e1,e2])
 """ print(player1.get_strategy_set()[3][1][1].get_id())
 print(len(player1.get_strategy_set()))
 for i in range(len(player1.get_strategy_set())):
@@ -24,7 +25,8 @@ for i in range(len(player1.get_strategy_set())):
     print(resource_id) """
 
 cglf1 = cglf.CGLF([player1, player2], [e1,e2])
-print(cglf1.calculate_utility())
+#print(cglf1.calculate_utility())
+print(cglf1.get_utility())
 
 #print(len(cglf1.get_strategy_profiles()))
 #print(cglf1.get_strategy_profiles()[15][0][1][1].get_id())
@@ -44,11 +46,14 @@ print(e1.get_failure_probability(1))
 print(player1.get_strategy_set()[1][0].get_id())
 print(len(player1.get_strategy_set()))
 print(player1.get_strategy_set() == player2.get_strategy_set()) """
-l1 = ["a","b","c","d"]
-l2 = [1,2,3,4]
-l3 = ["w","x","y","z"]
-""" strategy_sets = [l1, l2, l3]
-p = list(itertools.product(*strategy_sets))
+#l1 = [1,2]
+#l2 = [1,2]
+#strategy_sets = [l1, l2]
+""" listrep = list([1,2])
+n = len(listrep)
+l1_strategy_set = [("l1", [listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
+l2_strategy_set = [("l2", [listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
+p = list(itertools.product(*[l1_strategy_set, l2_strategy_set]))
 for v in p:
     print(v)
 print(len(p)) """

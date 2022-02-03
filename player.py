@@ -12,7 +12,7 @@ class Player():
     def set_strategy_set(self, resources):
         listrep = list(resources)
         n = len(listrep)
-        self.strategy_set = [(self.id, [listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
+        self.strategy_set = [(self, [listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
 
     def get_strategy_set(self):
         try:
