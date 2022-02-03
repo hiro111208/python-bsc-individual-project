@@ -11,6 +11,8 @@ class CGLF():
         self.utilities = None
 
     def set_strategy_profiles(self):
+        #dictionary of key (player, strategy)
+        # carteisan product
         strategy_sets = []
         for player in self.players:
             player.set_strategy_set(self.resources)
@@ -33,13 +35,13 @@ class CGLF():
         probability_product = 1
         total_cost = 0
         for resource in choices[player][1]:
-            failure_probability = resource.get_failure_probability(congestion[resource] - 1)
-            cost = resource.get_cost(congestion[resource] - 1)
+            failure_probability = resource.get_failure_probability(congestion[resource]-1)
+            cost = resource.get_cost(congestion[resource]-1)
             probability_product *= failure_probability
             total_cost += cost
-            print(resource.get_id())
-            print(probability_product)
-            print(total_cost)
+            #print(resource.get_id())
+            #print(probability_product)
+            #print(total_cost)
 
         utility = player.get_benefit()*(1-probability_product) - total_cost
         return utility
