@@ -10,10 +10,10 @@ class CGLF():
         self.players = players
         self.resources = resources
         self.pay_off_matrix = list()
-        self.set_pay_off_matrix()
+        self.reset_pay_off_matrix()
         self.number_of_profiles = 0
 
-    def set_pay_off_matrix(self):
+    def reset_pay_off_matrix(self):
         #dictionary of key (player, strategy)
         # carteisan product
         # strategy_sets = [] # strategy set of each player
@@ -56,7 +56,6 @@ class CGLF():
             print(f'{i}: Player {self.players[i].get_id()}')
         index = input('Enter number: ')
         target_player = self.players[int(index)]
-        strategy_profiles = copy.deepcopy(self.pay_off_matrix)
         for player in self.players:
             print(f'Choose a strategy of Player {target_player.get_id()} from below')
             strategy_set = player.get_strategy_set()
@@ -90,7 +89,7 @@ class CGLF():
         utility = player.get_benefit()*(1-probability_product) - total_cost
         return utility
 
-    """ def find_nash_equilibrium(self):
+    def find_nash_equilibrium(self):
         # step 1 - determine k*
         # step 6
         for player in self.players:
@@ -104,6 +103,15 @@ class CGLF():
             e_i # e_i: such that unilaterally additing this is profitable
 
     def find_d_stable_strategy_profiles(self, strategy_profiles): # there's no player with profitable d-move from the strategy profile
-        for strategy_profile in strategy_profiles:
-
-        return profiles """
+        for d_strategy_profile in reversed(strategy_profiles):
+            for strategy_profile in strategy_profiles:
+                for player in self.players:
+                    if len(d_strategy_profile['strategy_profile'][player]) > len(strategy_profile['strategy_profile'][player]):
+                        if d_strategy_profile['utilities'][player] <  strategy_profile['utilities'][player]: # utility
+                            strategy_profiles.remove(d_strategy_profile)
+                            print(f'To be removed: {d_strategy_profile}')
+                            break
+                else:
+                    continue
+                break
+        return strategy_profiles
