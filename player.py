@@ -9,10 +9,12 @@ class Player():
         return self.benefit
 
     # https://www.delftstack.com/ja/howto/python/powerset-python/
-    def set_strategy_set(self, resources):
+    def set_strategy_set(self, resources): # strategies that player can choose
         listrep = list(resources)
         n = len(listrep)
-        self.strategy_set = [(self, [listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
+        self.strategy_set = [([listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
+        # self.strategy_set = set([(self, [listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)])
+        # print(f'strategy set type: {type(self.strategy_set)}')
 
     def get_strategy_set(self):
         try:
