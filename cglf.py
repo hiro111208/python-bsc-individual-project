@@ -10,8 +10,21 @@ class CGLF():
         self.players = players
         self.resources = resources
         self.pay_off_matrix = list()
-        self.reset_pay_off_matrix()
         self.number_of_profiles = 0
+        
+        self.strategy_set = self.set_strategy_set(resources)
+        self.strategy_profiles = list()
+
+        self.reset_pay_off_matrix()
+
+    # https://www.delftstack.com/ja/howto/python/powerset-python/
+    def set_strategy_set(self, resources): # strategies that player can choose
+        listrep = list(resources)
+        n = len(listrep)
+        # self.strategy_set = [([listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
+        return [([listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
+        # self.strategy_set = set([(self, [listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)])
+        # print(f'strategy set type: {type(self.strategy_set)}')
 
     def reset_pay_off_matrix(self):
         #dictionary of key (player, strategy)
@@ -20,7 +33,8 @@ class CGLF():
         strategy_sets = dict()
         for player in self.players:
             player.set_strategy_set(self.resources)
-            strategy_sets[player] = player.get_strategy_set()
+            # strategy_sets[player] = player.get_strategy_set()
+            strategy_sets[player] = self.strategy_set
         product = [x for x in itertools.product(*strategy_sets.values())]
         strategy_profiles = [dict(zip(strategy_sets.keys(), r)) for r in product]
         for strategy_profile in strategy_profiles:
@@ -58,7 +72,7 @@ class CGLF():
         target_player = self.players[int(index)]
         for player in self.players:
             print(f'Choose a strategy of Player {target_player.get_id()} from below')
-            strategy_set = player.get_strategy_set()
+            """ strategy_set = player.get_strategy_set()
             for i in range(len(strategy_set)):
                 resource_id = ""
                 if player.get_strategy_set()[i] == []:
@@ -72,7 +86,21 @@ class CGLF():
             #print(len(strategy_profiles))
             #strategy_profiles = list(filter(lambda strategy_profile: (strategy_set[index]) in list(strategy_profile[0]), strategy_profiles))
             #print(len(strategy_profiles))
-            choices[player] = strategy_set[index]
+            choices[player] = strategy_set[index] """
+            for i in range(len(self.strategy_set)):
+                resource_id = ""
+                if self.strategy_set[i] == []:
+                    resource_id = "Empty"
+                else:
+                    for resource in self.strategy_set[i]:
+                        resource_id += (resource.get_id() + " ")
+                print(f'{i}: {resource_id}')
+            number = input('Enter number: ') # must be below the length of resources
+            index = int(number)
+            #print(len(strategy_profiles))
+            #strategy_profiles = list(filter(lambda strategy_profile: (strategy_set[index]) in list(strategy_profile[0]), strategy_profiles))
+            #print(len(strategy_profiles))
+            choices[player] = self.strategy_set[index]
         for cell in self.pay_off_matrix:
             if choices == cell['strategy_profile']:
                 return cell['utilities'][target_player]
@@ -89,7 +117,7 @@ class CGLF():
         utility = player.get_benefit()*(1-probability_product) - total_cost
         return utility
 
-    def find_nash_equilibrium(self):
+    """ def find_nash_equilibrium(self):
         # step 1 - determine k*
         # step 6
         for player in self.players:
@@ -103,6 +131,7 @@ class CGLF():
             e_i # e_i: such that unilaterally additing this is profitable
 
     def find_d_stable_strategy_profiles(self, strategy_profiles): # there's no player with profitable d-move from the strategy profile
+        k = len(self.players)
         for d_strategy_profile in reversed(strategy_profiles):
             for strategy_profile in strategy_profiles:
                 for player in self.players:
@@ -115,3 +144,71 @@ class CGLF():
                     continue
                 break
         return strategy_profiles
+
+    def step0(self):
+        k = len(self.players)
+        if v > c:
+        else:
+            k -= 1
+            # go to step1
+    
+    def step1(self):
+        for player in self.players:
+            # set Xdi = profitable drop resources
+        if Xdi != []:
+            xdi = max of Xdi
+        else:
+            xdi = 0
+        if sigma of xdi < km:
+            k -= 1
+            # go to step2
+        else:
+            # go to step3
+
+    def step2(self, strategy_profiles):
+        if k = 0:
+            for player in self.players:
+                if max_number_resources > 0:
+                    player.strategy_set
+                else:
+                    player.strategy_set = []
+        else:
+            # go to step1
+
+    def step3(self, strategy_profiles):
+        for player in self.players:
+            set Xai = profitable add resoureces
+        if Xai = []:
+            xai = min of Xai
+        else:
+            xai = m (last resource?)
+        if sigma of xai > km or profitable add resources > profitable drop resources:
+            # go to step5
+
+    def step4(self):
+        for player in self.players:
+
+    def step5(self):
+        for player in self.players:
+            set resources
+        if resources != []:
+            return
+        else:
+
+    def step6(self):
+        for player in self.players:
+            select minimum resource
+        set strategy_profile = 
+        if strategy_profile == []:
+            return
+
+    def step7(self):
+        set M
+        select min congestion a and player i
+        if a is min:
+            i's strategy = strategy + a
+        else:
+            select min congestion b and player j
+            i's strategy = strategy + a
+            j's strategy = strategy - a + b
+            go to step6 """

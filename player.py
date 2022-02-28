@@ -2,7 +2,7 @@ class Player():
 
     def __init__(self, player_id, benefit):
         self.id = player_id
-        self.strategy_set = None
+        #self.strategy_set = None
         self.benefit = benefit
 
     def get_benefit(self):
@@ -24,3 +24,6 @@ class Player():
 
     def get_id(self):
         return self.id
+
+    def get_benefit(self):
+        return self.benefit
