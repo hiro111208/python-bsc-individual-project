@@ -22,7 +22,8 @@ class CGLF():
         listrep = list(resources)
         n = len(listrep)
         # self.strategy_set = [([listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
-        return [([listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
+        #return [([listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)]
+        return [({listrep[k] for k in range(n) if i&1<<k}) for i in range(2**n)]
         # self.strategy_set = set([(self, [listrep[k] for k in range(n) if i&1<<k]) for i in range(2**n)])
         # print(f'strategy set type: {type(self.strategy_set)}')
 
@@ -37,6 +38,7 @@ class CGLF():
             strategy_sets[player] = self.strategy_set
         product = [x for x in itertools.product(*strategy_sets.values())]
         strategy_profiles = [dict(zip(strategy_sets.keys(), r)) for r in product]
+        print(f'strategy profiles type: {type(strategy_profiles)}')
         for strategy_profile in strategy_profiles:
             congestion = self.get_congestion(strategy_profile)
             utilities = dict()
@@ -64,21 +66,22 @@ class CGLF():
         return congestion
     
     def get_utility(self):
+        print(f'strategy type: {self.strategy_set[3]}')
         choices = {key: None for key in self.players} # dict key: player, value: player's strategy
         print(f'Choose Player from below')
+        """ players = list(self.players)
         for i in range(len(self.players)):
             print(f'{i}: Player {self.players[i].get_id()}')
         index = input('Enter number: ')
         target_player = self.players[int(index)]
         for player in self.players:
-            print(f'Choose a strategy of Player {target_player.get_id()} from below')
-            """ strategy_set = player.get_strategy_set()
-            for i in range(len(strategy_set)):
+            print(f'Choose a strategy of Player {player.get_id()} from below')
+            for i in range(len(self.strategy_set)):
                 resource_id = ""
-                if player.get_strategy_set()[i] == []:
+                if self.strategy_set[i] == []:
                     resource_id = "Empty"
                 else:
-                    for resource in player.get_strategy_set()[i]:
+                    for resource in self.strategy_set[i]:
                         resource_id += (resource.get_id() + " ")
                 print(f'{i}: {resource_id}')
             number = input('Enter number: ') # must be below the length of resources
@@ -86,10 +89,19 @@ class CGLF():
             #print(len(strategy_profiles))
             #strategy_profiles = list(filter(lambda strategy_profile: (strategy_set[index]) in list(strategy_profile[0]), strategy_profiles))
             #print(len(strategy_profiles))
-            choices[player] = strategy_set[index] """
+            choices[player] = self.strategy_set[index] """
+        players = list(self.players)
+        for i in range(len(players)):
+            print(f'{i}: Player {players[i].get_id()}')
+        index = input('Enter number: ')
+        target_player = players[int(index)]
+        print(f'Target player chosen: {target_player.get_id()}')
+        for player in players:
+            print(f'{player.get_id()} is in a set: {player in self.players}')
+            print(f'Choose a strategy of Player {player.get_id()} from below')
             for i in range(len(self.strategy_set)):
                 resource_id = ""
-                if self.strategy_set[i] == []:
+                if self.strategy_set[i] == set():
                     resource_id = "Empty"
                 else:
                     for resource in self.strategy_set[i]:

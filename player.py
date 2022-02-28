@@ -4,6 +4,7 @@ class Player():
         self.id = player_id
         #self.strategy_set = None
         self.benefit = benefit
+        #self.strategy = strategy
 
     def get_benefit(self):
         return self.benefit
@@ -27,3 +28,6 @@ class Player():
 
     def get_benefit(self):
         return self.benefit
+
+    def get_strategy(self):
+        return self.strategy
