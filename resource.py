@@ -4,7 +4,7 @@ import cost
 class Resource():
 
     def __init__(self, resource_id):
-        self.id = resource_id
+        self.id = resource_id # primary id
         self.costs = cost.Cost() # cost would be a dict() in which a key is congestion (natural integers) and a value is cost due to the congestion
         #self.failure_probability = failure_probability # failure_probability would be a dict() in which a key is congestion (natural integers) and a value is failure_probability due to the congestion
         self.failure_probabilities = failure_probability.FailureProbability()
@@ -24,7 +24,7 @@ class Resource():
     def get_failure_probability(self, congestion):
         return self.failure_probabilities.get_failure_probability(congestion)
     
-    def set_id(self, resource_id):
+    def set_id(self, resource_id): # id cant be changed in a simulation
         self.id = resource_id
 
     """ def set_cost(self, cost):

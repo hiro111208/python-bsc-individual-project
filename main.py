@@ -25,7 +25,7 @@ for i in range(len(player1.get_strategy_set())):
     print(resource_id) """
 
 #cglf1 = cglf.CGLF([player1, player2], [e1,e2])
-cglf1 = cglf.CGLF({player1, player2}, {e1,e2})
+cglf1 = cglf.CGLF([player1, player2], [e1,e2])
 #print(cglf1.calculate_utility())
 print(cglf1.get_utility())
 
