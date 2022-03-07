@@ -8,12 +8,12 @@ class Resource():
         self.costs = cost.Cost() # cost would be a dict() in which a key is congestion (natural integers) and a value is cost due to the congestion
         #self.failure_probability = failure_probability # failure_probability would be a dict() in which a key is congestion (natural integers) and a value is failure_probability due to the congestion
         self.failure_probabilities = failure_probability.FailureProbability()
-        costs = [1, 1/4] # cost must be increasing
+        """ costs = [1, 1/4] # cost must be increasing
         for i in range(len(costs)):
-            self.costs.update_costs(i, costs[i])
-        probabilities = [0.01, 0.26]
+            self.costs.update_costs(i, costs[i]) """
+        """ probabilities = [0.01, 0.26]
         for i in range(len(probabilities)):
-            self.failure_probabilities.update_failure_probabilities(i, probabilities[i])
+            self.failure_probabilities.update_failure_probabilities(i, probabilities[i]) """
 
     def get_id(self):
         return self.id

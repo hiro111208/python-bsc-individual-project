@@ -1,7 +1,8 @@
 class Cost():
 
     def __init__(self):
-        self.costs = list() # should be dict of int key and float value
+        #self.costs = list() # should be dict of int key and float value
+        self.costs = {1:1, 2:1/4}
 
     def get_costs(self, key):
         try:

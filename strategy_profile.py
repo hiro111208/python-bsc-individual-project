@@ -52,8 +52,8 @@ class StrategyProfile():
             probability_product = 1
             total_cost = 0
             for resource in strategy:
-                failure_probability = resource.get_failure_probability(self.congestion[resource]-1)
-                cost = resource.get_cost(self.congestion[resource]-1)
+                failure_probability = resource.get_failure_probability(self.congestion[resource])
+                cost = resource.get_cost(self.congestion[resource])
                 probability_product *= failure_probability
                 total_cost += cost
             utility = player_id.get_benefit()*(1-probability_product) - total_cost

@@ -1,6 +1,7 @@
 import itertools
 import copy
 import strategy_profile as sp
+import collections
 
 
 class CGLF():
@@ -48,13 +49,6 @@ class CGLF():
         for strategy_profile in strategy_profiles:
             self.strategy_profiles.append(sp.StrategyProfile(strategy_profile, self.players, self.resources)) """
 
-    def get_congestion(self, strategy_profile): # strategy profile is dict of 
-        congestion = {key: 0 for key in self.resources}
-        for element in strategy_profile.values():
-            for resource in element:
-                congestion[resource] += 1
-        return congestion
-
     def get_utility(self):
         choices = {key: None for key in self.players} # dict key: player, value: player's strategy
         print(f'Choose Player from below')
@@ -89,7 +83,7 @@ class CGLF():
                 print(f'even: {strategy_profile.even}')
                 return strategy_profile.utilities[target_player]
 
-    """ def find_nash_equilibrium(self):
+    def find_nash_equilibrium(self):
         # step 1 - determine k*
         # step 6
         for player in self.players:
@@ -118,8 +112,17 @@ class CGLF():
                 break
         return strategy_profiles
 
-    def step0(self):
+    """ def step0(self):
         k = len(self.players)
+        even_profiles = collections.defaultdict(list)
+        for strategy_profile in self.strategy_profiles:
+            if strategy_profile.even != None:
+                even_profiles[strategy_profile.even].append(strategy_profile)
+
+        for player in self.players:
+            for k_even_profile in even_profiles[k]:
+                for even_profile in even_profiles[k-1]:
+                    if k_even_profile.utilities >= even_profile[player]
         for player in self.players:
             v = player.benefit * (failure_probability(n) ** (m-1))
             x = 
