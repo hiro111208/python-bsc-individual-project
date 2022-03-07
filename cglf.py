@@ -73,7 +73,7 @@ class CGLF():
             index = int(number)
             #print(len(self.strategy_profiles))
             choices[player] = self.strategy_set[index]
-        print(f'choices: {choices}')
+        # print(f'choices: {choices}')
         for strategy_profile in self.strategy_profiles:
             equality = []
             for player in strategy_profile.strategies.keys(): # strategy is supposed to be set
@@ -83,7 +83,7 @@ class CGLF():
                 print(f'even: {strategy_profile.even}')
                 return strategy_profile.utilities[target_player]
 
-    def find_nash_equilibrium(self):
+    """ def find_nash_equilibrium(self):
         # step 1 - determine k*
         # step 6
         for player in self.players:
@@ -110,9 +110,16 @@ class CGLF():
                 else:
                     continue
                 break
-        return strategy_profiles
+        return strategy_profiles """
 
-    """ def step0(self):
+    def calculate_marginal_benefit(self, player, congestion, number_of_resources):
+        return player.benefit * (self.resources[0].get_failure_probability(congestion)**(number_of_resources))
+
+    def calculate_marginal_cost(self, congestion):
+        return self.resources[0].get_cost(congestion)/(1-self.resources[0].get_failure_probability(congestion))
+        
+    def step0(self):
+        print(f'Step0 called')
         k = len(self.players)
         even_profiles = collections.defaultdict(list)
         for strategy_profile in self.strategy_profiles:
@@ -120,6 +127,19 @@ class CGLF():
                 even_profiles[strategy_profile.even].append(strategy_profile)
 
         for player in self.players:
+            for k_even_profile in even_profiles[k]:
+                #marginal_benefit = player.benefit * (self.resources[0].get_failure_probability(len(self.players))**(len(self.resources)-1))
+                marginal_benefit = self.calculate_marginal_benefit(player, k, len(self.resources)-1)
+                #marginal_cost = self.resources[0].get_cost(len(self.players))/(1-self.resources[0].get_failure_probability(len(self.players)))
+                marginal_cost = self.calculate_marginal_cost(k)
+                if marginal_benefit < marginal_cost:
+                    k -= 1
+                    print(f'Go to step1')
+                    return even_profiles[k][0]
+        print(f'Found equilibrium')
+        return even_profiles[k][0]
+
+        """ for player in self.players:
             for k_even_profile in even_profiles[k]:
                 for even_profile in even_profiles[k-1]:
                     if k_even_profile.utilities >= even_profile[player]
@@ -131,24 +151,28 @@ class CGLF():
             return "strategy profile in which all players choose all resources"
         else:
             k -= 1
-            # go to step1
+            # go to step1 """
 
     def step1(self):
-        X = []
+        k = len(self.players)-1
+        xD = dict()
         for player in self.players:
-            # set Xdi = profitable drop resources
-            x = player.benefit * (failure_probability(k) ** (x - 1)) * (1 - failure_probability(k))
-        if Xdi != []:
-            xdi = max of Xdi
-        else:
-            xdi = 0
-        if sigma of xdi < km:
+            X = []
+            for x in range(1, len(self.resources)+1):
+                if self.calculate_marginal_benefit(player, k, x-1) >= self.calculate_marginal_cost(k):
+                    X.append(x)
+            if X == []:
+                xD[player] = 0
+            else:
+                xD.append(max(X))
+                xD[player] = max(X)
+        if sum(xD.values()) < k * len(self.resources):
             k -= 1
-            # go to step2
+            print(f'Go to step2')
         else:
-            # go to step3
+            print(f'Go to step3')
 
-    def step2(self, strategy_profiles):
+    """ def step2(self, strategy_profiles):
         if k = 0:
             for player in self.players:
                 if max_number_resources > 0:
@@ -156,19 +180,24 @@ class CGLF():
                 else:
                     player.strategy_set = []
         else:
-            # go to step1
+            print(f'Go to step1') """
 
     def step3(self, strategy_profiles):
+        k = len(self.players)-1
+        xA = dict()
         for player in self.players:
-            set Xai = profitable add resoureces
-        if Xai = []:
-            xai = min of Xai
-        else:
-            xai = m (last resource?)
-        if sigma of xai > km or profitable add resources > profitable drop resources:
-            # go to step5
+            X = []
+            for x in range(len(self.resources)):
+                if self.calculate_marginal_benefit(player, k, x) >= self.calculate_marginal_cost(k+1):
+                    X.append(x)
+            if X == []:
+                xA[player] = len(self.resources)
+            else:
+                xA[min] = min(X)
+        if sum(xA.values()) > k * len(self.resources) or any(xa[key] > xd[key] for key in xA.keys()):
+            print(f'Go to step5')
 
-    def step4(self):
+    """ def step4(self):
         for player in self.players:
 
     def step5(self):

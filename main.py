@@ -28,6 +28,7 @@ for i in range(len(player1.get_strategy_set())):
 cglf1 = cglf.CGLF([player1, player2], [e1,e2])
 #print(cglf1.calculate_utility())
 print(cglf1.get_utility())
+cglf1.step1()
 
 #print(len(cglf1.get_strategy_profiles()))
 #print(cglf1.get_strategy_profiles()[15][0][1][1].get_id())
