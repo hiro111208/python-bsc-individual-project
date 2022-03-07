@@ -86,6 +86,7 @@ class CGLF():
                 equality.append(strategy_profile.strategies[player]==choices[player])
             # print(f'equality: {equality}')
             if set(equality) == {True}:
+                print(f'even: {strategy_profile.even}')
                 return strategy_profile.utilities[target_player]
 
     """ def find_nash_equilibrium(self):

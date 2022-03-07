@@ -4,9 +4,18 @@ class StrategyProfile():
         self.players = players
         self.resources = resources
         self.congestion = dict() # key: resource_id, value: int
+        self.even = None
         self.utilities = dict() # key: player_id, value: float
         self.set_congestion()
+        self.check_even()
         self.calculate_utilities()
+
+    def check_even(self):
+        congestions = set()
+        for congestion in self.congestion.values():
+            congestions.add(congestion)
+        if len(congestions) == 1:
+            self.even = congestions.pop()
 
     def get_utilities(self):
         return self.utilities
