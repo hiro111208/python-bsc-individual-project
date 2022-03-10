@@ -1,21 +1,22 @@
+# from typing import Optional
+
 class StrategyProfile():
     def __init__(self, strategies, players, resources):
         self.strategies = strategies # key: player id, value: a set of resources
         self.players = players
         self.resources = resources
         self.congestion = None # key: resource_id, value: int
-        self.even = None
         self.utilities = dict() # key: player_id, value: float
         self.set_congestion()
-        self.check_even()
+        self.even = self.check_even()
         self.calculate_utilities()
 
-    def check_even(self):
+    def check_even(self) -> int:
         congestions = set()
         for congestion in self.congestion.values():
             congestions.add(congestion)
         if len(congestions) == 1:
-            self.even = congestions.pop()
+            return congestions.pop()
 
     def get_utilities(self):
         return self.utilities
@@ -23,7 +24,7 @@ class StrategyProfile():
     def get_strategies(self):
         return self.strategies
 
-    def get_utility(self, player_id):
+    def get_utility(self, player_id) -> float:
         # exception handling
         return self.utilities[player_id]
 
@@ -56,5 +57,4 @@ class StrategyProfile():
                 cost = resource.get_cost(self.congestion[resource])
                 probability_product *= failure_probability
                 total_cost += cost
-            utility = player_id.get_benefit()*(1-probability_product) - total_cost
-            self.utilities[player_id] = utility
+            self.utilities[player_id] = player_id.get_benefit()*(1-probability_product) - total_cost

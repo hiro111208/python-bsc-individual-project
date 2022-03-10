@@ -153,7 +153,7 @@ class CGLF():
             k -= 1
             # go to step1 """
 
-    def step1(self):
+    """ def step1(self):
         k = len(self.players)-1
         xD = dict()
         for player in self.players:
@@ -170,7 +170,7 @@ class CGLF():
             k -= 1
             print(f'Go to step2')
         else:
-            print(f'Go to step3')
+            print(f'Go to step3') """
 
     """ def step2(self, strategy_profiles):
         if k = 0:

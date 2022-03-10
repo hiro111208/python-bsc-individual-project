@@ -4,19 +4,13 @@ class Cost():
         #self.costs = list() # should be dict of int key and float value
         self.costs = {1:1, 2:1/4}
 
-    def get_costs(self, key):
+    def get_cost(self, key:int):
         try:
             return self.costs[key]
         except (TypeError, IndexError):
             print("No cost with the provided key.")
 
-    def get_cost(self, key):
-        try:
-            return self.costs[key]
-        except IndexError:
-            print("No value with the key")
-
-    def update_costs(self, key, value):
+    def update_costs(self, key:int, value):
         try:
             if value < 0:
                 print("Enter positive value")

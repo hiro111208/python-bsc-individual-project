@@ -9,9 +9,9 @@ e2 = resource.Resource("e2")
 e3 = resource.Resource("e3")
 
 # the number of congestions must be equal to the number of players
-player1 = player.Player("Player1", 1.1)
-player2 = player.Player("Player2", 4)
-player3 = player.Player("Kosuke", 5)
+player1 = player.Player("1", 1.1)
+player2 = player.Player("2", 4)
+player3 = player.Player("3", 5)
 #player1.set_strategy_set([e1,e2])
 """ print(player1.get_strategy_set()[3][1][1].get_id())
 print(len(player1.get_strategy_set()))
@@ -28,7 +28,7 @@ for i in range(len(player1.get_strategy_set())):
 cglf1 = cglf.CGLF([player1, player2], [e1,e2])
 #print(cglf1.calculate_utility())
 print(cglf1.get_utility())
-cglf1.step1()
+# cglf1.step1()
 
 #print(len(cglf1.get_strategy_profiles()))
 #print(cglf1.get_strategy_profiles()[15][0][1][1].get_id())

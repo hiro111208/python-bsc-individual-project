@@ -6,11 +6,11 @@ class Player():
         self.benefit = benefit
         #self.strategy = set()
 
-    def get_strategy_set(self):
+    """ def get_strategy_set(self):
         try:
             return self.strategy_set
         except:
-            print("Strategy set has not been defined.")
+            print("Strategy set has not been defined.") """
 
     def get_id(self):
         return self.id
@@ -18,5 +18,5 @@ class Player():
     def get_benefit(self):
         return self.benefit
 
-    def get_strategy(self):
-        return self.strategy
+    """ def get_strategy(self):
+        return self.strategy """
