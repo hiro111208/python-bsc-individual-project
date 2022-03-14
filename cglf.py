@@ -62,13 +62,13 @@ class CGLF():
             print(f'{player.get_id()} is in a set: {player in self.players}')
             print(f'Choose a strategy of Player {player.get_id()} from below')
             for i in range(len(self.strategy_set)):
-                resource_id = ""
+                resource_name = ""
                 if self.strategy_set[i] == set():
-                    resource_id = "Empty"
+                    resource_name = "Empty"
                 else:
                     for resource in self.strategy_set[i]:
-                        resource_id += (resource.get_id() + " ")
-                print(f'{i}: {resource_id}')
+                        resource_name += (str(resource.get_name()) + " ")
+                print(f'{i}: {resource_name}')
             number = input('Enter number: ') # must be below the length of resources
             index = int(number)
             #print(len(self.strategy_profiles))
@@ -157,11 +157,11 @@ class CGLF():
         k = len(self.players)-1
         xD = dict()
         for player in self.players:
-            X = []
+            XD = []
             for x in range(1, len(self.resources)+1):
                 if self.calculate_marginal_benefit(player, k, x-1) >= self.calculate_marginal_cost(k):
-                    X.append(x)
-            if X == []:
+                    XD.append(x)
+            if XD == []:
                 xD[player] = 0
             else:
                 xD.append(max(X))
@@ -170,32 +170,34 @@ class CGLF():
             k -= 1
             print(f'Go to step2')
         else:
-            print(f'Go to step3') """
+            print(f'Go to step3')
 
-    """ def step2(self, strategy_profiles):
+    def step2(self, strategy_profiles):
         if k = 0:
+            strategy_profiles = self.strategy_profiles
             for player in self.players:
-                if max_number_resources > 0:
-                    player.strategy_set
+                if xD[player] > 0:
+                    strategy_profiles = list(filter(lambda x: len(x.strategies[player]) == xD[player]))
                 else:
-                    player.strategy_set = []
+                    strategy_profiles = list(filter(lambda x: x.strategies[player] == set()))
+            return strategy_profiles[0]
         else:
-            print(f'Go to step1') """
+            print(f'Go to step1')
 
     def step3(self, strategy_profiles):
         k = len(self.players)-1
         xA = dict()
         for player in self.players:
-            X = []
+            XA = []
             for x in range(len(self.resources)):
                 if self.calculate_marginal_benefit(player, k, x) >= self.calculate_marginal_cost(k+1):
-                    X.append(x)
-            if X == []:
+                    XA.append(x)
+            if XA == []:
                 xA[player] = len(self.resources)
             else:
                 xA[min] = min(X)
         if sum(xA.values()) > k * len(self.resources) or any(xa[key] > xd[key] for key in xA.keys()):
-            print(f'Go to step5')
+            print(f'Go to step5') """
 
     """ def step4(self):
         for player in self.players:

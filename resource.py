@@ -3,8 +3,9 @@ import cost
 
 class Resource():
 
-    def __init__(self, resource_id):
-        self.id = resource_id # primary id
+    def __init__(self, resource_id: int, name: str):
+        self.id = resource_id # primary id int
+        self.name = name
         self.costs = cost.Cost() # cost would be a dict() in which a key is congestion (natural integers) and a value is cost due to the congestion
         #self.failure_probability = failure_probability # failure_probability would be a dict() in which a key is congestion (natural integers) and a value is failure_probability due to the congestion
         self.failure_probabilities = failure_probability.FailureProbability()
@@ -15,8 +16,11 @@ class Resource():
         for i in range(len(probabilities)):
             self.failure_probabilities.update_failure_probabilities(i, probabilities[i]) """
 
-    def get_id(self):
+    def get_id(self) -> int:
         return self.id
+
+    def get_name(self) -> str:
+        return self.name
 
     def get_cost(self, congestion:int) -> float:
         return self.costs.get_cost(congestion)
