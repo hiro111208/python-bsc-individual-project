@@ -1,6 +1,6 @@
 import itertools
 import copy
-import strategy_profile as sp
+from strategy_profile import StrategyProfile
 import collections
 
 
@@ -37,7 +37,7 @@ class CGLF():
         product = [x for x in itertools.product(*strategy_sets.values())]
         strategy_profiles = [dict(zip(strategy_sets.keys(), r)) for r in product]
         for strategy_profile in strategy_profiles:
-            self.strategy_profiles.append(sp.StrategyProfile(strategy_profile, self.players, self.resources))
+            self.strategy_profiles.append(StrategyProfile(strategy_profile, self.players, self.resources))
 
     """ def build_strategy_profiles(self):
         strategy_sets = dict()
@@ -153,7 +153,7 @@ class CGLF():
             k -= 1
             # go to step1 """
 
-    """ def step1(self):
+    def step1(self):
         k = len(self.players)-1
         xD = dict()
         for player in self.players:
@@ -174,13 +174,22 @@ class CGLF():
 
     def step2(self, strategy_profiles):
         if k = 0:
-            strategy_profiles = self.strategy_profiles
+            #strategy_profiles = self.strategy_profiles
+            strategies = dict()
+            resource_index = 1
             for player in self.players:
                 if xD[player] > 0:
-                    strategy_profiles = list(filter(lambda x: len(x.strategies[player]) == xD[player]))
+                    strategy = set()
+                    for i in range(resource_index, xD[player] + 1):
+                        strategy.add(self.resources[i])
+                    resource_index += xD[player]
+                    strategies[player] = strategy
+                    #strategy_profiles = list(filter(lambda x: len(x.strategies[player]) == xD[player]))
                 else:
-                    strategy_profiles = list(filter(lambda x: x.strategies[player] == set()))
-            return strategy_profiles[0]
+                    strategies[player] = set()
+                    #strategy_profiles = list(filter(lambda x: x.strategies[player] == set()))
+            #return strategy_profiles[0]
+            return StrategyProfile(strategies, self.players, self.resources)
         else:
             print(f'Go to step1')
 
@@ -197,12 +206,47 @@ class CGLF():
             else:
                 xA[min] = min(X)
         if sum(xA.values()) > k * len(self.resources) or any(xa[key] > xd[key] for key in xA.keys()):
-            print(f'Go to step5') """
+            print(f'Go to step5')
 
-    """ def step4(self):
+    def step4(self):
+        strategies = dict()
         for player in self.players:
+            di = k*m - self.sigma(1, i, len(sp.strategies[j])) - self.sigma(i, len(self.players), xA[j])
+            r = min([xD, xA + di])
+            strategy = set()
+            for i in range(resource_index, r + 1):
+                strategy.add(self.resources[i])
+            resource_index = (resource_index + r) % len(self.resources)
+            strategies[player] = strategy
+        return StrategyProfile(strategies, self.players, self.resources)
+
 
     def step5(self):
+        X = []
+        for player in self.players:
+            Xi = []
+            for x in range(1, len(self.resources) + 1):
+                if self.calculate_marginal_benefit(player, k, x-1) <= self.calculate_marginal_cost(k + 1):
+                    Xi.append(x)
+            X.append(Xi)
+        x = []
+        for Xi in X:
+            if Xi == []:
+                x.append(0)
+            else:
+                x.append(max(Xi))
+        resource_index = 1
+        for i in range(self.players):
+            r = min(x[i], km - self.sigma(1, i, len(sp.strategies[j])))
+            if km - self.sigma(1, i, len(sp.strategies[j])) > 0:
+                strategy = set()
+                for i in range(resource_index, r + 1):
+                    strategy.add(self.resources[i])
+                strategies[player] = strategy
+                resource_index = (resource_index + r) % len(self.resources)
+            else:
+                strategy[player] = set()
+
         for player in self.players:
             set resources
         if resources != []:
@@ -225,4 +269,10 @@ class CGLF():
             select min congestion b and player j
             i's strategy = strategy + a
             j's strategy = strategy - a + b
-            go to step6 """
+            go to step6
+
+    def sigma(start, end, collection):
+        sum = 0
+        for i in range(start, end + 1):
+            sum += collection[i]
+        return sum
