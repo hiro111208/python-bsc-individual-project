@@ -1,17 +1,19 @@
-import resource
-import player
-import failure_probability
-import itertools
-import cglf
+from resource import Resource
+from player import Player
+from cglf import CGLF
 
-e1 = resource.Resource("e1")
-e2 = resource.Resource("e2")
-e3 = resource.Resource("e3")
+""" e1 = resource.Resource(1)
+e2 = resource.Resource(2)
+e3 = resource.Resource(3) """
+resources = list()
+number = 2
+for i in range(1, number + 1):
+    resources.append(Resource(i, f'e{i}'))
 
 # the number of congestions must be equal to the number of players
-player1 = player.Player("1", 1.1)
-player2 = player.Player("2", 4)
-player3 = player.Player("3", 5)
+player1 = Player(1, 1.1)
+player2 = Player(2, 4)
+player3 = Player(3, 5)
 #player1.set_strategy_set([e1,e2])
 """ print(player1.get_strategy_set()[3][1][1].get_id())
 print(len(player1.get_strategy_set()))
@@ -25,7 +27,7 @@ for i in range(len(player1.get_strategy_set())):
     print(resource_id) """
 
 #cglf1 = cglf.CGLF([player1, player2], [e1,e2])
-cglf1 = cglf.CGLF([player1, player2], [e1,e2])
+cglf1 = CGLF([player1, player2], resources)
 #print(cglf1.calculate_utility())
 print(cglf1.get_utility())
 # cglf1.step1()
