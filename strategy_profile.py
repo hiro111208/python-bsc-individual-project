@@ -58,3 +58,10 @@ class StrategyProfile():
                 probability_product *= failure_probability
                 total_cost += cost
             self.utilities[player_id] = player_id.get_benefit()*(1-probability_product) - total_cost
+
+    def display_result(self):
+        for player in self.players:
+            print(f'Player {player.get_id()}')
+            print(f'Strategy: {strategies[player]}')
+            print(f'Utility: {utilities[player]}')
+            print()
