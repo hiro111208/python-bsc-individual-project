@@ -253,15 +253,24 @@ class CGLF():
             return
         else:
 
-    def step6(self):
+    def step6(self, strategy_profile):
         for player in self.players:
-            select minimum resource
-        set strategy_profile = 
-        if strategy_profile == []:
-            return
+            option = {x: strategy_profile.get_congestion()[x] for x in strategy_profile.get_congestion() if x not in strategies[player]}
+            light_resource = min(option, key=option.get)
+        a_move_players = []
+        for player in self.players:
+            if new_sp > current_sp:
+                a_move_players.append(player)
+        if len(a_move_players) == 0:
+            return strategy_profile
 
-    def step7(self):
-        set M
+    def step7(self, strategy_profile):
+        resources_to_be_added = []
+        for resource in self.resources:
+            for player in self.players:
+                if new_sp > current_sp:
+                    resources_to_be_added.append(resource)
+        light_resource = 
         select min congestion a and player i
         if a is min:
             i's strategy = strategy + a
