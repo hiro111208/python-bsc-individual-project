@@ -265,12 +265,19 @@ class CGLF():
             return strategy_profile
 
     def step7(self, strategy_profile):
-        resources_to_be_added = []
+        resources_to_be_added = [] # M(sigma)
         for resource in self.resources:
             for player in self.players:
-                if new_sp > current_sp:
+                if new_sp > current_sp: # new_sp means strategy with a resouce which player finds beneficial to add
                     resources_to_be_added.append(resource)
-        light_resource = 
+        light_resource = min_congestion(resources_to_be_added)
+        a_move_player = a_move_players_from_step6[player who wanna use light resource]
+        if light_resource min_congestion(strategy_profile):
+            # one step addition
+            strategies[a_move_player] = strategies[a_move_player].update({light_resource})
+            # back to step6
+        else:
+            # two step addition
         select min congestion a and player i
         if a is min:
             i's strategy = strategy + a

@@ -1,7 +1,7 @@
 # from typing import Optional
 
 class StrategyProfile():
-    def __init__(self, strategies, players, resources):
+    def __init__(self, strategies: dict, players, resources):
         self.strategies = strategies # key: player id, value: a set of resources
         self.players = players
         self.resources = resources
