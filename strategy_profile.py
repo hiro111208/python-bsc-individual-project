@@ -5,9 +5,9 @@ class StrategyProfile():
         self.strategies = strategies # key: player id, value: a set of resources
         self.players = players
         self.resources = resources
-        self.congestion = None # key: resource_id, value: int
+        #self.congestion = None # key: resource_id, value: int
         self.utilities = dict() # key: player_id, value: float
-        self.set_congestion()
+        self.congestion = self.get_congestion(self.strategies)
         self.even = self.check_even()
         self.calculate_utilities()
 
@@ -28,21 +28,21 @@ class StrategyProfile():
         # exception handling
         return self.utilities[player_id]
 
-    def get_congestion(self):
-        return self.congestion
+    """ def get_congestion(self):
+        return self.congestion """
 
-    def set_congestion(self): # strategy profile is dict of 
+    def get_congestion(self, strategies): # strategy profile is dict of 
         congestion = {key: 0 for key in self.resources}
-        for strategy in self.strategies.values():
+        for strategy in strategies.values():
             for resource in strategy:
                 congestion[resource] += 1
-        self.congestion = congestion
+        return congestion
 
     """ def simulate_change(self, move: int, resources: set, player):
         strategies = deepcopy.self.strategies
-        if move == 0:
+        if move == 0: # drop
             strategies[player] = strategies[player].difference_update(resources)
-        if move == 1:
+        if move == 1: # add
             strategies[player] = strategies[player].update(resources)
         return  """
     """ def set_congestion(self):
@@ -57,14 +57,25 @@ class StrategyProfile():
 
     def calculate_utilities(self):
         for player_id, strategy in self.strategies.items():
-            probability_product = 1
+            """ probability_product = 1 # if player didnt choose any resource, failure probability = 1
             total_cost = 0
             for resource in strategy:
                 failure_probability = resource.get_failure_probability(self.congestion[resource])
                 cost = resource.get_cost(self.congestion[resource])
                 probability_product *= failure_probability
                 total_cost += cost
-            self.utilities[player_id] = player_id.get_benefit()*(1-probability_product) - total_cost
+            self.utilities[player_id] = player_id.get_benefit()*(1-probability_product) - total_cost """
+            self.utilities[player_id] = self.calculate_utility(player_id, strategy, self.congestion)
+
+    def calculate_utility(self, player, strategy, congestion):
+        probability_product = 1 # if player didnt choose any resource, failure probability = 1
+        total_cost = 0
+        for resource in strategy:
+            failure_probability = resource.get_failure_probability(congestion[resource])
+            cost = resource.get_cost(congestion[resource])
+            probability_product *= failure_probability
+            total_cost += cost
+        return player.get_benefit()*(1-probability_product) - total_cost
 
     def display_result(self):
         for player in self.players:
