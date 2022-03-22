@@ -112,7 +112,7 @@ class CGLF():
                 break
         return strategy_profiles """
 
-    """ def calculate_marginal_benefit(self, player, congestion, number_of_resources):
+    def calculate_marginal_benefit(self, player, congestion, number_of_resources):
         return player.benefit * (self.resources[0].get_failure_probability(congestion)**(number_of_resources))
 
     def calculate_marginal_cost(self, congestion):
@@ -251,12 +251,12 @@ class CGLF():
             return strategy_profile
 
     def step7(self, strategy_profile):
-        resources_to_be_added = [] # M(sigma)
+        a_move_resources = [] # M(sigma)
         for resource in self.resources:
             for player in self.players:
                 if new_sp > current_sp: # new_sp means strategy with a resouce which player finds beneficial to add
-                    resources_to_be_added.append(resource)
-        light_resource = min_congestion(resources_to_be_added)
+                    a_move_resources.append(resource)
+        light_resource = min_congestion(a_move_resources)
         a_move_player = a_move_players_from_step6[player who wanna use light resource]
         if light_resource min_congestion(strategy_profile):
             # one step addition
@@ -288,83 +288,103 @@ class CGLF():
     def equilibrium_finder(self):
         print(f'step0')
         k = len(self.players)
-        even_profiles = collections.defaultdict(list)
+        """ even_profiles = collections.defaultdict(list)
         for strategy_profile in self.strategy_profiles:
             if strategy_profile.even != None:
                 even_profiles[strategy_profile.even].append(strategy_profile)
 
         for player in self.players:
-            for k_even_profile in even_profiles[k]:
-                if self.calculate_marginal_benefit(player, k, len(self.resources)-1) < self.calculate_marginal_cost(k):
-                    k -= 1
-                    print(f'step1')
-                    xD = dict()
-                    for player in self.players:
-                        XD = []
-                        for x in range(1, len(self.resources)+1):
-                            if self.calculate_marginal_benefit(player, k, x-1) >= self.calculate_marginal_cost(k):
-                                XD.append(x)
-                        if XD == []:
-                            xD[player] = 0
-                        else:
-                            # xD.append(max(X))
-                            xD[player] = max(X)
-                    if sum(xD.values()) < k * len(self.resources):
-                        k -= 1
-                        print(f'step2')
-                    else:
-                        print(f'step3')
-                        xA = dict()
-                        for player in self.players:
-                            XA = []
-                            for x in range(len(self.resources)):
-                                if self.calculate_marginal_benefit(player, k, x) >= self.calculate_marginal_cost(k+1):
-                                    XA.append(x)
-                            if XA == []:
-                                xA[player] = len(self.resources)
-                            else:
-                                xA[player] = min(XA)
-                        if sum(xA.values()) > k * len(self.resources) or any(xa[player] > xd[player] for player in self.players):
-                            print(f'step5') # k*-even, post-addition D-stable profile
-                            x = dict()
-                            for player in self.players:
-                                X = []
-                                for x in range(1, len(self.resources) + 1):
-                                    if self.calculate_marginal_benefit(player, k, x-1) <= self.calculate_marginal_cost(k + 1):
-                                        X.append(x)
-                                if X == []:
-                                    x[player] = 0
-                                else:
-                                    x[player] = max(X)
-                            resource_index = 1
-                            strategies = dict()
-                            for i in range(1, self.players + 1):
-                                strategy_sum = 0
-                                for j in range(1, i):
-                                    strategy_sum += len(sp.strategies[j]) # Specify sp
-                                comparison = k * len(self.resources) - strategy_sum
-                                if comparison > 0: # 
-                                    strategy = set()
-                                    r = min([x[i], comparison])
-                                    for num in range(resource_index, r + 1):
-                                        strategy.add(self.resources[num])
-                                    strategies[player] = strategy
-                                    resource_index = (resource_index + r) % len(self.resources)
-                                else:
-                                    strategy[player] = set()
-                            print(f'step6') # confused
-                            for player in self.players:
-                                # option = {x: strategy_profile.get_congestion()[x] for x in strategy_profile.get_congestion() if x not in strategies[player]}
-                                option = self.resources.difference_update(strategies[player])
-                                light_resource = min(option, key=option.get)
-                            a_move_players = []
-                            for player in self.players:
-                                if new_sp > current_sp:
-                                    a_move_players.append(player)
-                            if len(a_move_players) == 0:
-                                return strategy_profile
-                            print(f'step7')
-                            
+            for k_even_profile in even_profiles[k]: """
+        player = min(self.players, key=lambda x::x.benefit)
+        if self.calculate_marginal_benefit(player, k, len(self.resources)-1) >= self.calculate_marginal_cost(k): # player with the lowest benefit
+            print(f'Found equilibrium')
+            return even_profiles[k][0]
+        else:
+            k -= 1
+            print(f'step1')
+            xD = dict()
+            for player in self.players:
+                XD = []
+                for x in range(1, len(self.resources)+1):
+                    if self.calculate_marginal_benefit(player, k, x-1) >= self.calculate_marginal_cost(k):
+                        XD.append(x)
+                if XD == []:
+                    xD[player] = 0
                 else:
-                    print(f'Found equilibrium')
-                    return even_profiles[k][0] """
+                    # xD.append(max(X))
+                    xD[player] = max(X)
+            if sum(xD.values()) < k * len(self.resources):
+                k -= 1
+                print(f'step2')
+            else:
+                print(f'step3')
+                xA = dict()
+                for player in self.players:
+                    XA = []
+                    for x in range(len(self.resources)):
+                        if self.calculate_marginal_benefit(player, k, x) >= self.calculate_marginal_cost(k+1):
+                            XA.append(x)
+                    if XA == []:
+                        xA[player] = len(self.resources)
+                    else:
+                        xA[player] = min(XA)
+                if sum(xA.values()) > k * len(self.resources) or any(xa[player] > xd[player] for player in self.players):
+                    print(f'step5') # k*-even, post-addition D-stable profile
+                    x = dict()
+                    for player in self.players:
+                        X = []
+                        for x in range(1, len(self.resources) + 1):
+                            if self.calculate_marginal_benefit(player, k, x-1) <= self.calculate_marginal_cost(k + 1):
+                                X.append(x)
+                        if X == []:
+                            x[player] = 0
+                        else:
+                            x[player] = max(X)
+                    resource_index = 1
+                    strategies = dict()
+                    for i in range(1, self.players + 1):
+                        strategy_sum = 0
+                        for j in range(1, i):
+                            strategy_sum += len(sp.strategies[j]) # Specify sp
+                        comparison = k * len(self.resources) - strategy_sum
+                        if comparison > 0: # 
+                            strategy = set()
+                            r = min([x[i], comparison])
+                            for num in range(resource_index, r + 1):
+                                strategy.add(self.resources[num])
+                            strategies[player] = strategy
+                            resource_index = (resource_index + r) % len(self.resources)
+                        else:
+                            strategy[player] = set()
+                    print(f'step6') # confused
+                    a_move_players = []
+                    a_move_resources = [] # M(sigma)
+                    # sp ; strategy profile
+                    for player in self.players:
+                        # option = {x: strategy_profile.get_congestion()[x] for x in strategy_profile.get_congestion() if x not in strategies[player]}
+                        option = self.resources.difference_update(strategies[player])
+                        light_resource = min(option, key=option.get)
+                        if sp.simulate_change(sp.strategies[player].add(light_resource), player):
+                            a_move_players.append(player)
+                            a_move_resources.append(light_resource)
+                            # a_move_resources[player] = light_resource
+                    if len(a_move_players) == 0:
+                        return sp
+                    print(f'step7')
+                    sp = social optimum profile
+                    # a_move_resources = [] # M(sigma)
+                    light_resource = min_congestion(a_move_resources)
+                    a_move_player = a_move_players_from_step6[player who wanna use light resource]
+                    # a_move_player, light_resource_a = min(a_move_resources.items(), key=lambda x: x[1])
+                    if light_resource min_congestion(sp):
+                        # one step addition
+                        strategies[a_move_player] = strategies[a_move_player].update({light_resource})
+                        # back to step6
+                    else:
+                        # two step addition
+                        light_resource_b = min congestion(sp)
+                        player_j = player using light_resource_a
+                        strategies[a_move_player] = strategies[a_move_player].update({light_resource})
+                        strategies[player_j] = strategies[player_j].difference_update(light_resource_a)
+                        strategies[player_j] = strategies[player_j].update(light_resource_b)
+                    print(f'back to step6')

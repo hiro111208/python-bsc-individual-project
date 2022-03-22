@@ -38,8 +38,12 @@ class StrategyProfile():
                 congestion[resource] += 1
         return congestion
 
-    """ def simulate_change(self, move: int, resources: set, player):
-        strategies = deepcopy.self.strategies
+    def simulate_change(self, strategy: set, player) -> bool:
+        new_strategies = self.strategies
+        new_strategies[player] = strategy
+        new_congestion = get_congestion(new_strategies)
+        return self.calculate_utility(player, strategy, new_congestion) > self.utilities[player]
+        """ strategies = deepcopy.self.strategies
         if move == 0: # drop
             strategies[player] = strategies[player].difference_update(resources)
         if move == 1: # add
