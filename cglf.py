@@ -316,6 +316,26 @@ class CGLF():
             if sum(xD.values()) < k * len(self.resources):
                 k -= 1
                 print(f'step2')
+                if k == 0:
+                    #strategy_profiles = self.strategy_profiles
+                    strategies = dict()
+                    resource_index = 1
+                    for player in self.players:
+                        if xD[player] > 0:
+                            strategy = set()
+                            for i in range(resource_index, xD[player] + 1):
+                                strategy.add(self.resources[i])
+                            resource_index += xD[player]
+                            strategies[player] = strategy
+                            #strategy_profiles = list(filter(lambda x: len(x.strategies[player]) == xD[player]))
+                        else:
+                            strategies[player] = set()
+                            #strategy_profiles = list(filter(lambda x: x.strategies[player] == set()))
+                    #return strategy_profiles[0]
+                    return StrategyProfile(strategies, self.players, self.resources)
+                else:
+                    print(f'Go to step1')
+                    
             else:
                 print(f'step3')
                 xA = dict()
