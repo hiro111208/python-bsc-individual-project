@@ -1,6 +1,7 @@
 from resource import Resource
 from player import Player
 from cglf import CGLF
+from equilibrium import Equilibrium
 
 """ e1 = resource.Resource(1)
 e2 = resource.Resource(2)
@@ -11,8 +12,8 @@ for i in range(1, number + 1):
     resources.append(Resource(i, f'e{i}'))
 
 # the number of congestions must be equal to the number of players
-player1 = Player(1, 1.1)
-player2 = Player(2, 4)
+player1 = Player(1, 4)
+player2 = Player(2, 1.1)
 player3 = Player(3, 5)
 #player1.set_strategy_set([e1,e2])
 """ print(player1.get_strategy_set()[3][1][1].get_id())
@@ -27,10 +28,13 @@ for i in range(len(player1.get_strategy_set())):
     print(resource_id) """
 
 #cglf1 = cglf.CGLF([player1, player2], [e1,e2])
-cglf1 = CGLF([player1, player2], resources)
+#cglf1 = CGLF([player1, player2], resources)
 #print(cglf1.calculate_utility())
 print(cglf1.get_utility())
+#cglf1.display()
 # cglf1.step1()
+equilibrium_profile = Equilibrium([player1, player2], resources)
+print(equilibrium_profile.display_result())
 
 #print(len(cglf1.get_strategy_profiles()))
 #print(cglf1.get_strategy_profiles()[15][0][1][1].get_id())

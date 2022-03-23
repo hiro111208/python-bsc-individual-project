@@ -7,7 +7,7 @@ class StrategyProfile():
         self.resources = resources
         #self.congestion = None # key: resource_id, value: int
         self.utilities = dict() # key: player_id, value: float
-        self.congestion = self.get_congestion(self.strategies)
+        self.congestion = self.get_congestion(self.strategies) # key: resource, value: int
         self.even = self.check_even()
         self.calculate_utilities()
 
@@ -17,6 +17,8 @@ class StrategyProfile():
             congestions.add(congestion)
         if len(congestions) == 1:
             return congestions.pop()
+        else:
+            return None
 
     def get_utilities(self):
         return self.utilities
@@ -31,8 +33,8 @@ class StrategyProfile():
     """ def get_congestion(self):
         return self.congestion """
 
-    def get_congestion(self, strategies): # strategy profile is dict of 
-        congestion = {key: 0 for key in self.resources}
+    def get_congestion(self, strategies):
+        congestion = {key: 0 for key in self.resources} # key: resource, value: int
         for strategy in strategies.values():
             for resource in strategy:
                 congestion[resource] += 1
