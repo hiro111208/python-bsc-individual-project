@@ -6,12 +6,12 @@ import collections
 
 class CGLF():
 
-    def __init__(self, players, resources):
-        self.players = players
+    def __init__(self, players: dict, resources):
+        self.players = players # key:int, value:Player
         """ self.players = dict()
         for i in range(len(players)):
             self.players[i] = players[i] """
-        self.resources = resources
+        self.resources = resources # key:int, value:Resource
         """ self.resources = dict()
         for i in range(len(resources)):
             self.resources[i] = resources[i] """
@@ -32,8 +32,8 @@ class CGLF():
 
     def build_strategy_profiles(self):
         strategy_sets = dict()
-        for player in self.players:
-            strategy_sets[player] = self.strategy_set
+        for player in self.players.values():
+            strategy_sets[player.id] = self.strategy_set
         product = [x for x in itertools.product(*strategy_sets.values())]
         strategy_profiles = [dict(zip(strategy_sets.keys(), r)) for r in product]
         for strategy_profile in strategy_profiles:
@@ -87,6 +87,6 @@ class CGLF():
         for sp in self.strategy_profiles:
             if sp.even != None:
                 print(f'{sp.even}-even')
-                for player in self.players:
-                    print(f'Player {player.id}: {sp.utilities[player]}')
+                for player in self.players.values():
+                    print(f'Player {player.id}: {sp.utilities[player.id]}')
                 print()

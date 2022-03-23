@@ -6,15 +6,16 @@ from cglf import CGLF
 """ e1 = resource.Resource(1)
 e2 = resource.Resource(2)
 e3 = resource.Resource(3) """
-resources = list()
+resources = dict()
 number = 2
 for i in range(1, number + 1):
-    resources.append(Resource(i))
+    resources[i] = Resource(i)
 
 # the number of congestions must be equal to the number of players
 player1 = Player(1, 4)
 player2 = Player(2, 1.1)
 player3 = Player(3, 5)
+players = {player1.id: player1, player2.id:player2}
 #player1.set_strategy_set([e1,e2])
 """ print(player1.get_strategy_set()[3][1][1].get_id())
 print(len(player1.get_strategy_set()))
@@ -27,7 +28,7 @@ for i in range(len(player1.get_strategy_set())):
             resource_id += (resource.get_id() + " ")
     print(resource_id) """
 
-cglf1 = CGLF([player1, player2], resources)
+cglf1 = CGLF(players, resources)
 #print(cglf1.calculate_utility())
 #print(cglf1.get_utility())
 cglf1.display()

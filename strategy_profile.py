@@ -2,12 +2,12 @@
 
 class StrategyProfile():
     def __init__(self, strategies: dict, players, resources):
-        self.strategies = strategies # key: player id, value: a set of resources
+        self.strategies = strategies # key: player id, value: a set of int(resource id)
         self.players = players
         self.resources = resources
         #self.congestion = None # key: resource_id, value: int
         self.utilities = dict() # key: player_id, value: float
-        self.congestion = self.get_congestion(self.strategies) # key: resource, value: int
+        self.congestion = self.get_congestion(self.strategies) # key: int(resource id), value: int
         self.even = self.check_even()
         self.calculate_utilities()
 
@@ -31,7 +31,7 @@ class StrategyProfile():
         return self.utilities[player_id]
 
     def get_congestion(self, strategies):
-        congestion = {key: 0 for key in self.resources} # key: resource, value: int
+        congestion = {key: 0 for key in self.resources.keys()} # key: resource, value: int
         for strategy in strategies.values():
             for resource in strategy:
                 congestion[resource] += 1
@@ -66,11 +66,11 @@ class StrategyProfile():
         probability_product = 1 # if player didnt choose any resource, failure probability = 1
         total_cost = 0
         for resource in strategy:
-            failure_probability = resource.get_failure_probability(congestion[resource])
-            cost = resource.get_cost(congestion[resource])
+            failure_probability = self.resources[resource].get_failure_probability(congestion[resource])
+            cost = self.resources[resource].get_cost(congestion[resource])
             probability_product *= failure_probability
             total_cost += cost
-        return player.get_benefit()*(1-probability_product) - total_cost
+        return self.players[player].get_benefit()*(1-probability_product) - total_cost
 
     def display_result(self):
         for player in self.players:
@@ -78,3 +78,6 @@ class StrategyProfile():
             print(f'Strategy: {self.strategies[player]}')
             print(f'Utility: {self.utilities[player]}')
             print()
+
+    def display_all_info(self):
+        print(f'{self.strategies}')
