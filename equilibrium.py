@@ -10,7 +10,6 @@ class Equilibrium():
 
         self.players = players
         self.resources = resources
-        #print(self.step0())
 
     def calculate_marginal_benefit(self, player, congestion, number_of_resources):
         return player.benefit * (self.resources[0].get_failure_probability(congestion)**(number_of_resources))
@@ -52,7 +51,6 @@ class Equilibrium():
 
     def step2(self): # done
         if self.k == 0:
-            #strategy_profiles = self.strategy_profiles
             strategies = dict()
             resource_index = 1
             for player in self.players:
@@ -62,11 +60,8 @@ class Equilibrium():
                         strategy.add(self.resources[i])
                     resource_index += self.xD[player.id]
                     strategies[player.id] = strategy
-                    #strategy_profiles = list(filter(lambda x: len(x.strategies[player]) == self.xD[player]))
                 else:
                     strategies[player.id] = set()
-                    #strategy_profiles = list(filter(lambda x: x.strategies[player] == set()))
-            #return strategy_profiles[0]
             return StrategyProfile(strategies, self.players, self.resources)
         else:
             self.step1()
@@ -86,7 +81,7 @@ class Equilibrium():
         else:
             self.step4()
 
-    def step4(self): # needs research about strategy profile, profile is k*-even, D-stable
+    def step4(self): # profile is k*-even, D-stable
         d = dict()
         strategies = {key:set() for key in self.players}
         for i in range(1, len(self.players) + 1):

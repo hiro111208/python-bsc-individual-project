@@ -67,7 +67,7 @@ class CGLF():
                     resource_name = "Empty"
                 else:
                     for resource in self.strategy_set[i]:
-                        resource_name += (str(resource.get_name()) + " ")
+                        resource_name += (f'e{resource.get_id()} ')
                 print(f'{i}: {resource_name}')
             number = input('Enter number: ') # must be below the length of resources
             index = int(number)
