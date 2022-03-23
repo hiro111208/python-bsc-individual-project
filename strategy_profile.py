@@ -30,9 +30,6 @@ class StrategyProfile():
         # exception handling
         return self.utilities[player_id]
 
-    """ def get_congestion(self):
-        return self.congestion """
-
     def get_congestion(self, strategies):
         congestion = {key: 0 for key in self.resources} # key: resource, value: int
         for strategy in strategies.values():
@@ -63,14 +60,6 @@ class StrategyProfile():
 
     def calculate_utilities(self):
         for player_id, strategy in self.strategies.items():
-            """ probability_product = 1 # if player didnt choose any resource, failure probability = 1
-            total_cost = 0
-            for resource in strategy:
-                failure_probability = resource.get_failure_probability(self.congestion[resource])
-                cost = resource.get_cost(self.congestion[resource])
-                probability_product *= failure_probability
-                total_cost += cost
-            self.utilities[player_id] = player_id.get_benefit()*(1-probability_product) - total_cost """
             self.utilities[player_id] = self.calculate_utility(player_id, strategy, self.congestion)
 
     def calculate_utility(self, player, strategy, congestion):
