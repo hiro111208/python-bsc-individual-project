@@ -13,14 +13,14 @@ player2 = Player(2, 5)
 player3 = Player(3, 2.5)
 players = {player1.id: player1, player2.id:player2} """
 players = dict()
-number_of_players = 250
+number_of_players = 225
 # number_of_players = 2
 for i in range(1, number_of_players + 1):
     players[i] = Player(i, number_of_players)
     number_of_players -= 1
 #player1.set_strategy_set([e1,e2])
 
-number_of_resources = 250
+number_of_resources = 225
 # number_of_resources = 2
 
 """ cost = dict()

@@ -38,6 +38,9 @@ class StrategyProfile():
                 congestion[resource] += 1
         return congestion
 
+    def update_congestion(self):
+        self.congestion = self.get_congestion(self.strategies)
+
     def simulate_change(self, strategy: set, player_id) -> bool:
         new_strategies = deepcopy(self.strategies)
         new_strategies[player_id] = strategy

@@ -42,7 +42,6 @@ class Equilibrium():
             return StrategyProfile({key:self.resources.keys() for key in self.players.keys()}, self.players, self.resources)
         else:
             self.k -= 1
-            print(f'{self.k}')
             self.step1()
 
     def step1(self): # done
@@ -94,7 +93,7 @@ class Equilibrium():
                 self.xA[player.id] = len(self.resources)
             else:
                 self.xA[player.id] = min(XA)
-        if sum(self.xA.values()) > self.k * len(self.resources) or any(self.xA[player.id] > self.xD[player.id] for player in self.players.values()):
+        if sum(self.xA.values()) > self.k * len(self.resources) or any(self.xA[player_id] > self.xD[player_id] for player_id in self.players.keys()):
             self.step5() # k*-even, post-addition D-stable profile
         else:
             self.step4()
@@ -134,8 +133,9 @@ class Equilibrium():
             else:
                 self.x[player.id] = max(X)
         resource_index = 1
-        strategies = {key:set() for key in self.players}
+        strategies = {key:set() for key in self.players.keys()}
         for i in range(1, len(self.players) + 1):
+
             if self.k * len(self.resources) - self.sigma(1, i - 1, strategies) > 0:
                 r = min([self.x[i], self.k * len(self.resources) - self.sigma(1, i - 1, strategies)])
                 strategy = set()
@@ -179,6 +179,9 @@ class Equilibrium():
         print(f'{strategy_profile.even}')
         print(f'step7 executed')
         a_move_player, light_resource_a = min(a_move_resources.items(), key=lambda x: x[1])
+        print(f'a_move_player: {a_move_player}')
+        print(f'light_resource_a: {light_resource_a}')
+        
         if light_resource_a == min(strategy_profile.congestion.items(), key=lambda x: x[1])[0]:
             # one step addition
             # strategy_profile.strategies[a_move_player] = strategies[a_move_player].update({light_resource_a})
@@ -195,18 +198,19 @@ class Equilibrium():
                 print(f'players haveing resource a, not b')
             else:
                 print(f'it wasnt')
-            try:
-                player_j = [key for key, value in strategy_profile.strategies.items() if light_resource_a in value and not light_resource_b in value][0]
-                if player_j == None:
-                    print(f'player j not found')
-                strategy_profile.strategies[a_move_player].update({light_resource_a})
-                strategy_profile.strategies[player_j].difference_update({light_resource_a})
-                strategy_profile.strategies[player_j].update({light_resource_b})
-                print(f'a* and b* resource added')
-            except:
-                print(f'something went wrong')
-                print(f'light_resource_a; {light_resource_a}')
-                print(f'light_resource_b; {light_resource_b}')
-                print(str(([f'key: {key}, value: {strategy_profile.strategies[key]}' for key, value in strategy_profile.strategies.items() if light_resource_a in value])))
-                return 0
+        #try:
+            player_j = [key for key, value in strategy_profile.strategies.items() if light_resource_a in value and not light_resource_b in value][0]
+            if player_j == None:
+                print(f'player j not found')
+            strategy_profile.strategies[a_move_player].update({light_resource_a})
+            strategy_profile.strategies[player_j].difference_update({light_resource_a})
+            strategy_profile.strategies[player_j].update({light_resource_b})
+            print(f'a* and b* resource added')
+        #except:
+            print(f'something went wrong')
+            print(f'light_resource_a; {light_resource_a}')
+            print(f'light_resource_b; {light_resource_b}')
+            print(str(([f'key: {key}, value: {strategy_profile.strategies[key]}' for key, value in strategy_profile.strategies.items() if light_resource_a in value])))
+            return 0
+        strategy_profile.update_congestion()
         self.step6(strategy_profile)
