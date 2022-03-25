@@ -1,4 +1,5 @@
 # from typing import Optional
+from copy import deepcopy
 
 class StrategyProfile():
     def __init__(self, strategies: dict, players, resources):
@@ -37,26 +38,11 @@ class StrategyProfile():
                 congestion[resource] += 1
         return congestion
 
-    def simulate_change(self, strategy: set, player) -> bool:
-        new_strategies = self.strategies
-        new_strategies[player] = strategy
-        new_congestion = get_congestion(new_strategies)
-        return self.calculate_utility(player, strategy, new_congestion) > self.utilities[player]
-        """ strategies = deepcopy.self.strategies
-        if move == 0: # drop
-            strategies[player] = strategies[player].difference_update(resources)
-        if move == 1: # add
-            strategies[player] = strategies[player].update(resources)
-        return  """
-    """ def set_congestion(self):
-        congestion = dict()
-        for strategy in self.strategies.values():
-            for resource in strategy:
-                if resource not in congestion:
-                    congestion[resource] = 1
-                else:
-                    congestion[resource] += 1
-        self.congestion = congestion """
+    def simulate_change(self, strategy: set, player_id) -> bool:
+        new_strategies = deepcopy(self.strategies)
+        new_strategies[player_id] = strategy
+        new_congestion = self.get_congestion(new_strategies)
+        return self.calculate_utility(player_id, strategy, new_congestion) > self.utilities[player_id]
 
     def calculate_utilities(self):
         for player_id, strategy in self.strategies.items():
@@ -73,8 +59,9 @@ class StrategyProfile():
         return self.players[player].get_benefit()*(1-probability_product) - total_cost
 
     def display_result(self):
-        for player in self.players:
-            print(f'Player {player.get_id()}')
+        print(f'Number of players: {len(self.players.keys())}')
+        for player in self.players.keys():
+            print(f'Player {player}')
             print(f'Strategy: {self.strategies[player]}')
             print(f'Utility: {self.utilities[player]}')
             print()

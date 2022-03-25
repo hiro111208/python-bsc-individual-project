@@ -1,4 +1,5 @@
 from strategy_profile import StrategyProfile
+from copy import deepcopy
 
 class Equilibrium():
 
@@ -12,6 +13,7 @@ class Equilibrium():
         self.resources = resources
         self.profile = None
         self.step0()
+        # self.step7(StrategyProfile({1:{1},2:{1}}, self.players, self.resources), {1:2})
 
     def tmp(self):
         return StrategyProfile({1: {1}, 2: {1}}, self.players, self.resources)
@@ -32,13 +34,15 @@ class Equilibrium():
         return sum
 
     def step0(self): # done
+        print(f'step0 executed')
         player = min(self.players.values(), key=lambda x:x.benefit)
         if self.calculate_marginal_benefit(player, len(self.players), len(self.resources)-1) >= self.calculate_marginal_cost(len(self.players)): # player with the lowest benefit
             print(f'Found equilibrium')
-            self.profile = even_profiles[k][0]
-            return even_profiles[k][0]
+            self.profile = StrategyProfile({key:self.resources.keys() for key in self.players.keys()}, self.players, self.resources)
+            return StrategyProfile({key:self.resources.keys() for key in self.players.keys()}, self.players, self.resources)
         else:
             self.k -= 1
+            print(f'{self.k}')
             self.step1()
 
     def step1(self): # done
@@ -55,6 +59,7 @@ class Equilibrium():
                 self.xD[player.id] = max(XD)
         if sum(self.xD.values()) < self.k * len(self.resources):
             self.k -= 1
+            print(f'{self.k}')
             self.step2()
         else:
             self.step3()
@@ -67,8 +72,8 @@ class Equilibrium():
             for player in self.players.values():
                 if self.xD[player.id] > 0:
                     strategy = set()
-                    for i in range(resource_index, self.xD[player.id] + 1):
-                        strategy.add(self.resources[i])
+                    for i in range(resource_index, resource_index + self.xD[player.id]): # change to while to ensure player get enough resources
+                        strategy.add(self.resources[i].id)
                     resource_index += self.xD[player.id]
                     strategies[player.id] = strategy
                 else:
@@ -90,7 +95,7 @@ class Equilibrium():
             else:
                 self.xA[player.id] = min(XA)
         if sum(self.xA.values()) > self.k * len(self.resources) or any(self.xA[player.id] > self.xD[player.id] for player in self.players.values()):
-            self.step5(strategy_profile) # k*-even, post-addition D-stable profile
+            self.step5() # k*-even, post-addition D-stable profile
         else:
             self.step4()
 
@@ -99,7 +104,7 @@ class Equilibrium():
         d = dict()
         strategies = {key:set() for key in self.players.keys()}
         resource_index = 1
-        print(f'Init. resource_index: {resource_index}')
+        #print(f'Init. resource_index: {resource_index}')
         for i in range(1, len(self.players) + 1):
             d[i] = self.k * len(self.resources) - self.sigma(1, i - 1, strategies) - self.sigma(i, len(self.players), self.xA)
             r = min([self.xD[i], self.xA[i] + d[i]]) # the number of resources player will receive
@@ -134,9 +139,14 @@ class Equilibrium():
             if self.k * len(self.resources) - self.sigma(1, i - 1, strategies) > 0:
                 r = min([self.x[i], self.k * len(self.resources) - self.sigma(1, i - 1, strategies)])
                 strategy = set()
-                for e in range(resource_index, r + 1):
-                    strategy.add(self.resources[e])
-                resource_index = (resource_index + r) % len(self.resources)
+                if resource_index == 0:
+                    resource_index = len(self.resources)
+                while r > 0:
+                    if resource_index == 0:
+                        resource_index = len(self.resources)
+                    strategy.add(resource_index)
+                    resource_index = (resource_index + 1) % len(self.resources)
+                    r -= 1
                 strategies[player.id] = strategy # needs to be fixed to link strategy and player
             else:
                 strategies[player.id] = set() # needs to be fixed to link strategy and player
@@ -145,15 +155,19 @@ class Equilibrium():
     def step6(self, strategy_profile): # done
         print(f'step6 executed')
         # a_move_players = []
-        a_move_resources = [] # M(sigma)
+        a_move_resources = dict() # M(sigma)
         for player in self.players.values():
             # option = {x: strategy_profile.get_congestion()[x] for x in strategy_profile.get_congestion() if x not in strategies[player]}
-            option = {key:value for key, value in strategy_profile.congestion.items() if not key in strategy_profile.strategies[player]}
-            light_resource = min(option, key=option.get) # option must be dict
-            if strategy_profile.simulate_change(strategy_profile.strategies[player].add(light_resource), player):
+            option = {key:value for key, value in strategy_profile.congestion.items() if not key in strategy_profile.strategies[player.id]}
+            light_resource = None
+            if len(option) > 0:
+                light_resource = min(option, key=option.get) # option must be dict
+            new_strategy = deepcopy(strategy_profile.strategies[player.id])
+            new_strategy.add(light_resource)
+            if light_resource != None and strategy_profile.simulate_change(new_strategy, player.id):
                 #a_move_players.append(player)
                 #a_move_resources.append(light_resource)
-                a_move_resources[player] = light_resource
+                a_move_resources[player.id] = light_resource
         if len(a_move_resources) == 0:
             # the profile is confirmed to be A-stable
             self.profile = strategy_profile
@@ -162,16 +176,37 @@ class Equilibrium():
             self.step7(strategy_profile, a_move_resources)
 
     def step7(self, strategy_profile, a_move_resources): # done
+        print(f'{strategy_profile.even}')
         print(f'step7 executed')
         a_move_player, light_resource_a = min(a_move_resources.items(), key=lambda x: x[1])
-        if light_resource == min(strategy_profile.congestion.items(), key=lambda x: x[1])[0]:
+        if light_resource_a == min(strategy_profile.congestion.items(), key=lambda x: x[1])[0]:
             # one step addition
-            strategies[a_move_player] = strategies[a_move_player].update({light_resource})
+            # strategy_profile.strategies[a_move_player] = strategies[a_move_player].update({light_resource_a})
+            strategy_profile.strategies[a_move_player].update({light_resource_a})
+            print(f'a* resource added')
         else:
             # two step addition
+            print(f'entered two-step addition')
+            print(f'trying')
             light_resource_b = min(strategy_profile.congestion, key=strategy_profile.congestion.get)
-            player_j = [key for key, value in strategy_profile.strategies.items() if light_resource_a in value and not light_resource_b in value][0]
-            strategies[a_move_player] = strategies[a_move_player].update({light_resource_a})
-            strategies[player_j] = strategies[player_j].difference_update({light_resource_a})
-            strategies[player_j] = strategies[player_j].update({light_resource_b})
-        self.step6(StrategyProfile(strategies, self.players, self.resources))
+            if len([key for key, value in strategy_profile.strategies.items() if (light_resource_a in value)]) > 0:
+                print(f'a: {light_resource_a}')
+                print(f'b: {light_resource_b}')
+                print(f'players haveing resource a, not b')
+            else:
+                print(f'it wasnt')
+            try:
+                player_j = [key for key, value in strategy_profile.strategies.items() if light_resource_a in value and not light_resource_b in value][0]
+                if player_j == None:
+                    print(f'player j not found')
+                strategy_profile.strategies[a_move_player].update({light_resource_a})
+                strategy_profile.strategies[player_j].difference_update({light_resource_a})
+                strategy_profile.strategies[player_j].update({light_resource_b})
+                print(f'a* and b* resource added')
+            except:
+                print(f'something went wrong')
+                print(f'light_resource_a; {light_resource_a}')
+                print(f'light_resource_b; {light_resource_b}')
+                print(str(([f'key: {key}, value: {strategy_profile.strategies[key]}' for key, value in strategy_profile.strategies.items() if light_resource_a in value])))
+                return 0
+        self.step6(strategy_profile)

@@ -3,11 +3,11 @@ import cost
 
 class Resource():
 
-    def __init__(self, resource_id: int):
+    def __init__(self, resource_id: int, cost, failure_probability):
         self.id = resource_id # primary id int
-        self.costs = cost.Cost() # cost would be a dict() in which a key is congestion (natural integers) and a value is cost due to the congestion
+        self.costs = cost # cost would be a dict() in which a key is congestion (natural integers) and a value is cost due to the congestion
         #self.failure_probability = failure_probability # failure_probability would be a dict() in which a key is congestion (natural integers) and a value is failure_probability due to the congestion
-        self.failure_probabilities = failure_probability.FailureProbability()
+        self.failure_probabilities = failure_probability
         """ costs = [1, 1/4] # cost must be increasing
         for i in range(len(costs)):
             self.costs.update_costs(i, costs[i]) """

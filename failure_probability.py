@@ -1,8 +1,8 @@
 class FailureProbability():
 
-    def __init__(self):
+    def __init__(self, failure_probabilities):
         #self.failure_probabilities = list() # should be dict of int key and float value
-        self.failure_probabilities = {1:0.01, 2:0.26}
+        self.failure_probabilities = failure_probabilities
 
     def get_failure_probability(self, key:int) -> float:
         try:

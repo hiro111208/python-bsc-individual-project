@@ -39,16 +39,6 @@ class CGLF():
         for strategy_profile in strategy_profiles:
             self.strategy_profiles.append(StrategyProfile(strategy_profile, self.players, self.resources))
 
-    """ def build_strategy_profiles(self):
-        strategy_sets = dict()
-        for player in self.players:
-            # player.set_strategy_set(self.resources)
-            # strategy_sets[player] = player.get_strategy_set()
-            strategy_sets[player] = self.strategy_set
-        strategy_profiles = itertools.product(strategy_sets, len(self.players))
-        for strategy_profile in strategy_profiles:
-            self.strategy_profiles.append(sp.StrategyProfile(strategy_profile, self.players, self.resources)) """
-
     def get_utility(self):
         choices = {key: None for key in self.players} # dict key: player, value: player's strategy
         print(f'Choose Player from below')
@@ -90,3 +80,13 @@ class CGLF():
                 for player in self.players.values():
                     print(f'Player {player.id}: {sp.utilities[player.id]}')
                 print()
+
+    def display_all(self):
+        for sp in self.strategy_profiles:
+            for player_id in sp.players.keys():
+                print(f'Player {player_id}')
+                print(f'Resource: {sp.strategies[player_id]}')
+                print(f'Utility: {sp.utilities[player_id]}')
+                print()
+            print()
+            print()
