@@ -19,10 +19,10 @@ class Resource():
         return self.id
 
     def get_cost(self, congestion:int) -> float:
-        return self.costs.get_cost(congestion)
+        return self.costs[congestion]
 
     def get_failure_probability(self, congestion:int) -> float:
-        return self.failure_probabilities.get_failure_probability(congestion)
+        return self.failure_probabilities[congestion]
     
     def set_id(self, resource_id:int): # id cant be changed in a simulation
         self.id = resource_id

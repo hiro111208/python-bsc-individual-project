@@ -1,16 +1,22 @@
 # from typing import Optional
 from copy import deepcopy
 
+from player import Player
+from resource import Resource
+
+from typing import Dict, Set
+
 class StrategyProfile():
-    def __init__(self, strategies: dict, players, resources):
+    def __init__(self, strategies: Dict[int, Set[int]], players: Dict[int, Player], resources: Dict[int, Resource]):
         self.strategies = strategies # key: player id, value: a set of int(resource id)
         self.players = players
         self.resources = resources
         #self.congestion = None # key: resource_id, value: int
-        self.utilities = dict() # key: player_id, value: float
+        self.utilities: Dict[int, float] = dict() # key: player_id, value: float
         self.congestion = self.get_congestion(self.strategies) # key: int(resource id), value: int
         self.even = self.check_even()
         self.calculate_utilities()
+        self.social_utility = sum(self.utilities.values())
 
     def check_even(self) -> int:
         congestions = set()
@@ -63,8 +69,12 @@ class StrategyProfile():
 
     def display_result(self):
         print(f'Number of players: {len(self.players.keys())}')
+        print(f'Social Utility: {self.social_utility}')
+        print(f'Resource Cost: {self.resources[1].costs}')
+        print(f'Resource Failure Probability: {self.resources[1].failure_probabilities}')
         for player in self.players.keys():
             print(f'Player {player}')
+            print(f'Benefit: {self.players[player].benefit}')
             print(f'Strategy: {self.strategies[player]}')
             print(f'Utility: {self.utilities[player]}')
             print()

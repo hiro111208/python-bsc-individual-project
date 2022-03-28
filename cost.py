@@ -1,17 +1,17 @@
+from typing import Dict
 class Cost():
 
-    def __init__(self, costs):
+    def __init__(self, costs:Dict[int, float]):
         #self.costs = list() # should be dict of int key and float value
-        #self.costs = {1:1, 2:1/4}
         self.costs = costs
 
-    def get_cost(self, key:int):
+    def get_cost(self, key:int) -> float:
         try:
             return self.costs[key]
         except (TypeError, IndexError):
             print("No cost with the provided key.")
 
-    def update_costs(self, key:int, value):
+    def update_costs(self, key:int, value:float):
         try:
             if value < 0:
                 print("Enter positive value")
