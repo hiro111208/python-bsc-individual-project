@@ -31,8 +31,8 @@ def price_of_anarchy_v0(num_players, num_resources, benefit, start_cost, start_p
     resources: Dict[int, Resource] = dict()
     for i in range(1, num_resources + 1):
         resources[i] = Resource(i, cost, failure_probability)
-    equilibrium_profile: StrategyProfile = Equilibrium(players, resources)
-    print(f'Equilibrium utility: {equilibrium_profile.profile.social_utility}')
+    equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
+    print(f'Equilibrium utility: {equilibrium_profile.social_utility}')
 
 #price_of_anarchy_v0(1000,100,10,1,1)
 
@@ -58,19 +58,19 @@ def price_of_anarchy_v1(num_players, num_resources, benefit, start_cost, start_p
     cglf = CGLF(players, resources)
     #print(cglf.get_utility())
     optimal_profile: StrategyProfile = max(cglf.strategy_profiles, key=lambda x:x.social_utility)
-    equilibrium_profile: StrategyProfile = Equilibrium(players, resources)
+    equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
     social_optima: float = optimal_profile.social_utility
     if social_optima != 0:
-        price_of_anarchy = social_optima / equilibrium_profile.profile.social_utility
-        #print(f'Price of Anarchy: {social_optima / equilibrium_profile.profile.social_utility}')
-        return (initial_fail, price_of_anarchy, social_optima, equilibrium_profile.profile.social_utility)
+        price_of_anarchy = social_optima / equilibrium_profile.social_utility
+        #print(f'Price of Anarchy: {social_optima / equilibrium_profile.social_utility}')
+        return (num_players, price_of_anarchy, social_optima, equilibrium_profile.social_utility)
     else:
-        #print(f'Equilibrium utility: {equilibrium_profile.profile.social_utility}')
-        return (initial_fail, None, social_optima, equilibrium_profile.profile.social_utility)
+        #print(f'Equilibrium utility: {equilibrium_profile.social_utility}')
+        return (num_players, None, social_optima, equilibrium_profile.social_utility)
 """ for player in range(2, 11):
     print(price_of_anarchy_v1(player,2,100,1,1)) """
 
-dataset = [price_of_anarchy_v1(3,3,100,1,fp) for fp in range(0,101)]
+dataset = [price_of_anarchy_v1(player,2,100,1,1) for player in range(2,11)]
 
 
 
@@ -99,12 +99,12 @@ def price_of_anarchy_v2(max_players, max_resources, max_benefit, max_cost, max_p
                         cglf = CGLF(players, resources)
                         #print(cglf.get_utility())
                         optimal_profile: StrategyProfile = max(cglf.strategy_profiles, key=lambda x:x.social_utility)
-                        equilibrium_profile: StrategyProfile = Equilibrium(players, resources)
+                        equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
                         social_optima: float = optimal_profile.social_utility
                         if social_optima != 0:
-                            print(f'Price of Anarchy: {social_optima / equilibrium_profile.profile.social_utility}')
+                            print(f'Price of Anarchy: {social_optima / equilibrium_profile.social_utility}')
                         else:
-                            print(f'Equilibrium utility: {equilibrium_profile.profile.social_utility}')
+                            print(f'Equilibrium utility: {equilibrium_profile.social_utility}')
                             """ cglf = CGcglf.display_all()LF(players, resources)
                             cglf.display_all() """
                             #equilibrium_profile.profile.display_result()
@@ -134,13 +134,13 @@ def check_algorithm(num_players, num_resources, benefit):
     equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
     equilibrium_profile.display_result()
 
-#check_algorithm(2, 10, 10)
+check_algorithm(10, 2, 10)
 
 def export_excel(data):
     wb = openpyxl.Workbook()
 
     # Check Sheet
-    print(f'Sheet name： {wb.get_sheet_names()}')
+    print(f'Sheet name: {wb.get_sheet_names()}')
 
     # Retrieve sheet object
     s1 = wb.get_sheet_by_name(wb.get_sheet_names()[0])
@@ -151,7 +151,7 @@ def export_excel(data):
 
     wb.save('test.xlsx')
 
-# export_excel(dataset)
+#export_excel(dataset)
 
 """ cost = dict()
 failure_probability = dict()

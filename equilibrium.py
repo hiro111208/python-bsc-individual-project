@@ -11,8 +11,8 @@ class Equilibrium():
 
         self.players = players # key: int, value: Player
         self.resources = resources
-        self.profile = None
-        self.step0()
+        self.profile = self.step0()
+        # self.step0()
         # self.step6(profile)
 
     def tmp(self):
@@ -34,18 +34,16 @@ class Equilibrium():
         return sum
 
     def step0(self): # done
-        #print(f'step0 executed')
         player = min(self.players.values(), key=lambda x:x.benefit)
         if self.calculate_marginal_benefit(player, len(self.players), len(self.resources)-1) >= self.calculate_marginal_cost(len(self.players)): # player with the lowest benefit
             #print(f'Found equilibrium')
-            self.profile = StrategyProfile({key:self.resources.keys() for key in self.players.keys()}, self.players, self.resources)
+            #self.profile = StrategyProfile({key:self.resources.keys() for key in self.players.keys()}, self.players, self.resources)
             return StrategyProfile({key:self.resources.keys() for key in self.players.keys()}, self.players, self.resources)
         else:
             self.k -= 1
-            self.step1()
+            return self.step1()
 
     def step1(self): # done
-        #print(f'step1 executed')
         for player in self.players.values():
             XD = []
             for x in range(1, len(self.resources)+1):
@@ -58,12 +56,11 @@ class Equilibrium():
                 self.xD[player.id] = max(XD)
         if sum(self.xD.values()) < self.k * len(self.resources):
             self.k -= 1
-            self.step2()
+            return self.step2()
         else:
-            self.step3()
+            return self.step3()
 
     def step2(self): # done
-        #print(f'step2 executed')
         if self.k == 0:
             strategies = dict()
             resource_index = 1
@@ -76,13 +73,12 @@ class Equilibrium():
                     strategies[player.id] = strategy
                 else:
                     strategies[player.id] = set()
-            self.profile = StrategyProfile(strategies, self.players, self.resources)
+            #self.profile = StrategyProfile(strategies, self.players, self.resources)
             return StrategyProfile(strategies, self.players, self.resources)
         else:
-            self.step1()
+            return self.step1()
 
     def step3(self):
-        #print(f'step3 executed')
         for player in self.players.values():
             XA = []
             for x in range(len(self.resources)):
@@ -93,12 +89,11 @@ class Equilibrium():
             else:
                 self.xA[player.id] = min(XA)
         if sum(self.xA.values()) > self.k * len(self.resources) or any(self.xA[player_id] > self.xD[player_id] for player_id in self.players.keys()):
-            self.step5() # k*-even, post-addition D-stable profile
+            return self.step5() # k*-even, post-addition D-stable profile
         else:
-            self.step4()
+            return self.step4()
 
     def step4(self): # profile is k*-even, D-stable
-        #print(f'step4 executed')
         d = dict()
         strategies = {key:set() for key in self.players.keys()}
         resource_index = 1
@@ -117,11 +112,10 @@ class Equilibrium():
                 resource_index = (resource_index + 1) % len(self.resources)
                 r -= 1
             strategies[self.players[i].id] = strategy # needs to be fixed to link strategy and player
-        self.profile = StrategyProfile(strategies, self.players, self.resources)
+        #self.profile = StrategyProfile(strategies, self.players, self.resources)
         return StrategyProfile(strategies, self.players, self.resources)
 
     def step5(self): # needs research in the same way as step4, profile is k*-even D-stable not A-stable
-        #print(f'step5 executed')
         for player in self.players.values():
             X = []
             for x in range(1, len(self.resources) + 1):
@@ -149,10 +143,9 @@ class Equilibrium():
                 strategies[player.id] = strategy # needs to be fixed to link strategy and player
             else:
                 strategies[player.id] = set() # needs to be fixed to link strategy and player
-        self.step6(StrategyProfile(strategies, self.players, self.resources))
+        return self.step6(StrategyProfile(strategies, self.players, self.resources))
 
     def step6(self, strategy_profile): # done
-        #print(f'step6 executed')
         # a_move_players = []
         a_move_resources = dict() # M(sigma)
         for player in self.players.values():
@@ -169,14 +162,12 @@ class Equilibrium():
                 a_move_resources[player.id] = light_resource
         if len(a_move_resources) == 0:
             # the profile is confirmed to be A-stable
-            self.profile = strategy_profile
+            #self.profile = strategy_profile
             return strategy_profile
         else:
-            self.step7(strategy_profile, a_move_resources)
+            return self.step7(strategy_profile, a_move_resources)
 
     def step7(self, strategy_profile, a_move_resources): # done
-        #print(f'{strategy_profile.even}')
-        #print(f'step7 executed')
         a_move_player, light_resource_a = min(a_move_resources.items(), key=lambda x: x[1])
         #print(f'a_move_player: {a_move_player}')
         #print(f'light_resource_a: {light_resource_a}')
@@ -210,6 +201,6 @@ class Equilibrium():
             #print(f'light_resource_a; {light_resource_a}')
             #print(f'light_resource_b; {light_resource_b}')
             #print(str(([f'key: {key}, value: {strategy_profile.strategies[key]}' for key, value in strategy_profile.strategies.items() if light_resource_a in value])))
-            return 0
+            
         strategy_profile.update_congestion()
-        self.step6(strategy_profile)
+        return self.step6(strategy_profile)
