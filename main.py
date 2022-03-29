@@ -11,6 +11,10 @@ from typing import Dict
 
 from copy import deepcopy
 
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+
 # the number of congestions must be equal to the number of players
 
 def price_of_anarchy_v0(num_players, num_resources, benefit, start_cost, start_probability):
@@ -41,12 +45,14 @@ def price_of_anarchy_v1_1(num_players, num_resources, benefit, start_cost, start
     initial_fail = 1 - 1 / (1 + 1 / 10 * start_probability)
     for i in range(1, num_players + 1):
         players[i] = Player(i, benefit)
-        benefit /= 5
+        #benefit /= 5
+        benefit = i ** i + initial_benefit
     cost = dict()
     failure_probability = dict()
     for i in range(1, num_players + 1):
         failure_probability[i] = 1 - 1 / (1 + i / 10 * start_probability)
     for i in range(1, num_players + 1):
+        #cost[i] = i ** i + start_cost
         cost[i] = i * start_cost
     resources: Dict[int, Resource] = dict()
     for i in range(1, num_resources + 1):
@@ -55,18 +61,18 @@ def price_of_anarchy_v1_1(num_players, num_resources, benefit, start_cost, start
     optimal_profile: StrategyProfile = max(cglf.strategy_profiles, key=lambda x:x.social_utility)
     equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
     social_optima: float = optimal_profile.social_utility
-    if social_optima != 0:
+    if int(equilibrium_profile.social_utility) != 0:
         price_of_anarchy = social_optima / equilibrium_profile.social_utility
         #print(f'Price of Anarchy: {social_optima / equilibrium_profile.social_utility}')
-        return (initial_benefit, price_of_anarchy, social_optima, equilibrium_profile.social_utility)
+        return (benefit, initial_cost, price_of_anarchy)
     else:
         #print(f'Equilibrium utility: {equilibrium_profile.social_utility}')
-        return (initial_benefit, None, social_optima, equilibrium_profile.social_utility)
+        return (benefit, initial_cost, 0)
 """ for player in range(2, 11):
     print(price_of_anarchy_v1(player,2,100,1,1)) """
 
-#dataset_1_1 = [price_of_anarchy_v1_1(2,2,benefit,1,1)[1] for benefit in range(0,101, 10)]
-#print(dataset_1_1)
+dataset_1_1 = [[price_of_anarchy_v1_1(2,2,benefit,cost,1) for benefit in range(0,101, 10)] for cost in range(0,11)]
+print(dataset_1_1)
 
 def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start_probability):
     players = dict()
@@ -130,7 +136,7 @@ def check_algorithm(num_players, num_resources, benefit, start_cost, start_proba
     equilibrium_profile.display_result()
     
 
-check_algorithm(5, 5, 100,1,1)
+#check_algorithm(5, 5, 100,1,1)
 
 def export_excel_2d(data):
     wb = openpyxl.Workbook()
@@ -146,6 +152,37 @@ def export_excel_2d(data):
             s1.cell(row=i+1,column=j+1,value=data[i][j])
 
     wb.save('test.xlsx')
+
+def graph(data):
+    tX = []
+    tY = []
+    tz = []
+    for element in data:
+        tX.append(element[0])
+        tY.append(element[1])
+        tz.append(element[2])
+    TX= np.array(tX)
+    TY= np.array(tY)
+    TZ= np.array(tz)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+
+    ax.set_title("Tmp", size=20)
+    ax.set_xlabel('x', size=15, color='black')
+    ax.set_ylabel('y', size=15, color='black')
+    ax.set_zlabel('z', size=15, color='black')
+
+    """ x = y = np.arange(-3,3,0.1)
+    X, Y = np.meshgrid(x,y)
+
+    z = np.exp(-(X**2 + Y**2)) """
+    print(TX)
+
+    ax.plot_wireframe(TX,TY,TZ)
+    plt.show()
+
+graph(dataset_1_1)
 
 """ def export_excel_3d(data):
     wb = openpyxl.Workbook()
