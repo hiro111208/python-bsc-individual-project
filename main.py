@@ -101,32 +101,36 @@ def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start
         #return (initial_benefit, initial_cost, None)
         return None
 
-dataset_1_2 = [[price_of_anarchy_v1_2(player,resource,100,1,1) for resource in range(2,6)] for player in range(2,6)]
+#dataset_1_2 = [[price_of_anarchy_v1_2(player,resource,100,1,1) for resource in range(2,6)] for player in range(2,6)]
 #print(dataset_1_2)
 
-def check_algorithm(num_players, num_resources, benefit):
+def check_algorithm(num_players, num_resources, benefit, start_cost, start_probability):
     players = dict()
+    initial_benefit = benefit
+    initial_cost = start_cost
+    initial_fail = 1 - 1 / (1 + 1 / 10 * start_probability)
     for i in range(1, num_players + 1):
         players[i] = Player(i, benefit)
-        benefit /= 5
+        #benefit /= 5
+        benefit = i ** i + initial_benefit
     cost = dict()
     failure_probability = dict()
-    rand_nums = sorted([random.randint(1, 100) for i in range(len(players))])
     for i in range(1, num_players + 1):
-        #failure_probability[i] = rand_nums[i-1] / 100
-        #failure_probability[i] = 1 - 1 / (1 + i)
-        failure_probability[i] = i / 100
+        failure_probability[i] = 1 - 1 / (1 + i / 10 * start_probability)
     for i in range(1, num_players + 1):
-        cost[i] = i
+        #cost[i] = i ** i + start_cost
+        cost[i] = i * start_cost
     resources: Dict[int, Resource] = dict()
     for i in range(1, num_resources + 1):
         resources[i] = Resource(i, cost, failure_probability)
     cglf = CGLF(players, resources)
+    optimal_profile: StrategyProfile = max(cglf.strategy_profiles, key=lambda x:x.social_utility)
     #cglf.display_all()
     equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
     equilibrium_profile.display_result()
+    
 
-check_algorithm(5, 5, 10)
+check_algorithm(5, 5, 100,1,1)
 
 def export_excel_2d(data):
     wb = openpyxl.Workbook()
@@ -143,7 +147,7 @@ def export_excel_2d(data):
 
     wb.save('test.xlsx')
 
-def export_excel_3d(data):
+""" def export_excel_3d(data):
     wb = openpyxl.Workbook()
 
     # Check Sheet
@@ -156,9 +160,9 @@ def export_excel_3d(data):
         for j in range(len(data[i])):
             s1.cell(row=i+1,column=j+1,value=data[i][j])
 
-    wb.save('test.xlsx')
+    wb.save('test.xlsx') """
 
-export_excel_2d(dataset_1_2)
+#export_excel_2d(dataset_1_2)
 
 """ cost = dict()
 failure_probability = dict()
