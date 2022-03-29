@@ -3,8 +3,6 @@ from player import Player
 from cglf import CGLF
 from equilibrium import Equilibrium
 from strategy_profile import StrategyProfile
-from failure_probability import FailureProbability
-from cost import Cost
 import random
 
 import openpyxl
@@ -36,7 +34,7 @@ def price_of_anarchy_v0(num_players, num_resources, benefit, start_cost, start_p
 
 #price_of_anarchy_v0(1000,100,10,1,1)
 
-def price_of_anarchy_v1(num_players, num_resources, benefit, start_cost, start_probability):
+def price_of_anarchy_v1_1(num_players, num_resources, benefit, start_cost, start_probability):
     players = dict()
     initial_benefit = benefit
     initial_cost = start_cost
@@ -46,9 +44,7 @@ def price_of_anarchy_v1(num_players, num_resources, benefit, start_cost, start_p
         benefit /= 5
     cost = dict()
     failure_probability = dict()
-    rand_nums = sorted([random.randint(1, 100) for i in range(len(players))])
     for i in range(1, num_players + 1):
-        #failure_probability[i] = i*9 / 100
         failure_probability[i] = 1 - 1 / (1 + i / 10 * start_probability)
     for i in range(1, num_players + 1):
         cost[i] = i * start_cost
@@ -56,61 +52,57 @@ def price_of_anarchy_v1(num_players, num_resources, benefit, start_cost, start_p
     for i in range(1, num_resources + 1):
         resources[i] = Resource(i, cost, failure_probability)
     cglf = CGLF(players, resources)
-    #print(cglf.get_utility())
     optimal_profile: StrategyProfile = max(cglf.strategy_profiles, key=lambda x:x.social_utility)
     equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
     social_optima: float = optimal_profile.social_utility
     if social_optima != 0:
         price_of_anarchy = social_optima / equilibrium_profile.social_utility
         #print(f'Price of Anarchy: {social_optima / equilibrium_profile.social_utility}')
-        return (num_players, price_of_anarchy, social_optima, equilibrium_profile.social_utility)
+        return (initial_benefit, price_of_anarchy, social_optima, equilibrium_profile.social_utility)
     else:
         #print(f'Equilibrium utility: {equilibrium_profile.social_utility}')
-        return (num_players, None, social_optima, equilibrium_profile.social_utility)
+        return (initial_benefit, None, social_optima, equilibrium_profile.social_utility)
 """ for player in range(2, 11):
     print(price_of_anarchy_v1(player,2,100,1,1)) """
 
-dataset = [price_of_anarchy_v1(player,2,100,1,1) for player in range(2,11)]
+#dataset_1_1 = [price_of_anarchy_v1_1(2,2,benefit,1,1)[1] for benefit in range(0,101, 10)]
+#print(dataset_1_1)
 
+def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start_probability):
+    players = dict()
+    initial_benefit = benefit
+    initial_cost = start_cost
+    initial_fail = 1 - 1 / (1 + 1 / 10 * start_probability)
+    for i in range(1, num_players + 1):
+        players[i] = Player(i, benefit)
+        #benefit /= 5
+        benefit = i ** i + initial_benefit
+    cost = dict()
+    failure_probability = dict()
+    for i in range(1, num_players + 1):
+        failure_probability[i] = 1 - 1 / (1 + i / 10 * start_probability)
+    for i in range(1, num_players + 1):
+        #cost[i] = i ** i + start_cost
+        cost[i] = i * start_cost
+    resources: Dict[int, Resource] = dict()
+    for i in range(1, num_resources + 1):
+        resources[i] = Resource(i, cost, failure_probability)
+    cglf = CGLF(players, resources)
+    optimal_profile: StrategyProfile = max(cglf.strategy_profiles, key=lambda x:x.social_utility)
+    equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
+    social_optima: float = optimal_profile.social_utility
+    if int(equilibrium_profile.social_utility) != 0:
+        price_of_anarchy = social_optima / equilibrium_profile.social_utility
+        #print(f'Price of Anarchy: {social_optima / equilibrium_profile.social_utility}')
+        #return (initial_benefit, initial_cost, price_of_anarchy)
+        return price_of_anarchy
+    else:
+        #print(f'Equilibrium utility: {equilibrium_profile.social_utility}')
+        #return (initial_benefit, initial_cost, None)
+        return None
 
-
-def price_of_anarchy_v2(max_players, max_resources, max_benefit, max_cost, max_probability):
-    for num_players in range(2, max_players + 1):
-        for num_resources in range(2, max_resources + 1):
-            for benefit in range(1, max_benefit + 1):
-                for start_cost in range(1, max_cost + 1):
-                    for start_probability in range(1, max_probability + 1):
-                        players = dict()
-                        for i in range(1, num_players + 1):
-                            players[i] = Player(i, benefit)
-                            benefit /= 5
-                        cost = dict()
-                        failure_probability = dict()
-                        rand_nums = sorted([random.randint(1, 100) for i in range(len(players))])
-                        for i in range(1, num_players + 1):
-                            #failure_probability[i] = rand_nums[i-1] / 100
-                            failure_probability[i] = i / 100
-                            #failure_probability[i] = 1 - 1 / (1 + i * start_probability)
-                        for i in range(1, num_players + 1):
-                            cost[i] = i * start_cost
-                        resources: Dict[int, Resource] = dict()
-                        for i in range(1, num_resources + 1):
-                            resources[i] = Resource(i, cost, failure_probability)
-                        cglf = CGLF(players, resources)
-                        #print(cglf.get_utility())
-                        optimal_profile: StrategyProfile = max(cglf.strategy_profiles, key=lambda x:x.social_utility)
-                        equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
-                        social_optima: float = optimal_profile.social_utility
-                        if social_optima != 0:
-                            print(f'Price of Anarchy: {social_optima / equilibrium_profile.social_utility}')
-                        else:
-                            print(f'Equilibrium utility: {equilibrium_profile.social_utility}')
-                            """ cglf = CGcglf.display_all()LF(players, resources)
-                            cglf.display_all() """
-                            #equilibrium_profile.profile.display_result()
-
-
-#price_of_anarchy_v2(5, 5, 50, 1, 1)
+dataset_1_2 = [[price_of_anarchy_v1_2(player,resource,100,1,1) for resource in range(2,6)] for player in range(2,6)]
+#print(dataset_1_2)
 
 def check_algorithm(num_players, num_resources, benefit):
     players = dict()
@@ -134,9 +126,9 @@ def check_algorithm(num_players, num_resources, benefit):
     equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
     equilibrium_profile.display_result()
 
-check_algorithm(10, 2, 10)
+check_algorithm(5, 5, 10)
 
-def export_excel(data):
+def export_excel_2d(data):
     wb = openpyxl.Workbook()
 
     # Check Sheet
@@ -151,7 +143,22 @@ def export_excel(data):
 
     wb.save('test.xlsx')
 
-#export_excel(dataset)
+def export_excel_3d(data):
+    wb = openpyxl.Workbook()
+
+    # Check Sheet
+    print(f'Sheet name: {wb.get_sheet_names()}')
+
+    # Retrieve sheet object
+    s1 = wb.get_sheet_by_name(wb.get_sheet_names()[0])
+
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            s1.cell(row=i+1,column=j+1,value=data[i][j])
+
+    wb.save('test.xlsx')
+
+export_excel_2d(dataset_1_2)
 
 """ cost = dict()
 failure_probability = dict()
