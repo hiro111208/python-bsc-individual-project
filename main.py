@@ -31,13 +31,16 @@ def validation(num_players, num_resources, benefit, start_cost):
         return False
     return True
 
-""" def input():
+def enter_variables():
     try:
-        player = input('Enter the number of players in integer: ')
-        resource = input('Enter the number of resources in integer: ')
-        benefit = input('Enter the value of benefit: ')
-        cost = input('Enter the value of initial cost for resource: ')
-        fp = input('Enter the value of initial failure probability for resource: ') """
+        num_players = int(input('Enter the number of players in integer: '))
+        num_resources = int(input('Enter the number of resources in integer: '))
+        benefit = float(input('Enter the value of benefit: '))
+        start_cost = float(input('Enter the value of initial cost for resource: '))
+        start_fp = float(input('Enter the value of initial failure probability for resource: '))
+        print("Success")
+    except:
+        print("Enter value in correct data type")
 
 def price_of_anarchy_v0(num_players, num_resources, benefit, start_cost, start_probability):
     if not validation(num_players, num_resources, benefit, start_cost):
@@ -62,44 +65,74 @@ def price_of_anarchy_v0(num_players, num_resources, benefit, start_cost, start_p
 
 #price_of_anarchy_v0(1000,100,10,1,1)
 
-def price_of_anarchy_v1_1(num_players, num_resources, benefit, start_cost, start_probability):
-    players = dict()
-    initial_benefit = benefit
-    initial_cost = start_cost
-    initial_fail = 1 - 1 / (1 + 1 / 10 * start_probability)
-    for i in range(1, num_players + 1):
-        players[i] = Player(i, benefit)
-        #benefit /= 5
-        benefit = i ** i + initial_benefit
-    cost = dict()
-    failure_probability = dict()
-    for i in range(1, num_players + 1):
-        failure_probability[i] = 1 - 1 / (1 + i / 10 * start_probability)
-    for i in range(1, num_players + 1):
-        #cost[i] = i ** i + start_cost
-        cost[i] = i * start_cost
-    resources: Dict[int, Resource] = dict()
-    for i in range(1, num_resources + 1):
-        resources[i] = Resource(i, cost, failure_probability)
-    cglf = CGLF(players, resources)
-    optimal_profile: StrategyProfile = max(cglf.strategy_profiles, key=lambda x:x.social_utility)
-    equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
-    social_optima: float = optimal_profile.social_utility
-    if int(equilibrium_profile.social_utility) != 0:
-        price_of_anarchy = social_optima / equilibrium_profile.social_utility
-        #print(f'Price of Anarchy: {social_optima / equilibrium_profile.social_utility}')
-        return (benefit, initial_cost, price_of_anarchy)
-    else:
-        #print(f'Equilibrium utility: {equilibrium_profile.social_utility}')
-        return (benefit, initial_cost, 0)
+def price_of_anarchy_v1_1():
+    try:
+        num_players = int(input('Enter the number of players in integer: '))
+        if num_players < 2 or num_players > 10:
+            print(f'The number of players must be more than 1 and less than 11.')
+            return False
+        num_resources = int(input('Enter the number of resources in integer: '))
+        if num_resources < 2 or num_resources > 10:
+            print(f'The number of players must be more than 1 and less than 11.')
+            return False
+        benefit = float(input('Enter the value of benefit: '))
+        if benefit < 0:
+            print(f'Benefit must be non-negative number.')
+            return False
+        start_cost = float(input('Enter the value of initial cost for resource: '))
+        if start_cost < 0:
+            print(f'Cost must be non-negative number.')
+            return False
+        start_probability = float(input('Enter the value of initial failure probability for resource: '))
+
+        players = dict()
+        initial_benefit = benefit
+        initial_cost = start_cost
+        initial_fail = 1 - 1 / (1 + 1 / 10 * start_probability)
+        for i in range(1, num_players + 1):
+            players[i] = Player(i, benefit)
+            #benefit /= 5
+            benefit = i ** i + initial_benefit
+        cost = dict()
+        failure_probability = dict()
+        for i in range(1, num_players + 1):
+            failure_probability[i] = 1 - 1 / (1 + i / 10 * start_probability)
+        for i in range(1, num_players + 1):
+            #cost[i] = i ** i + start_cost
+            cost[i] = i * start_cost
+        resources: Dict[int, Resource] = dict()
+        for i in range(1, num_resources + 1):
+            resources[i] = Resource(i, cost, failure_probability)
+        cglf = CGLF(players, resources)
+        optimal_profile: StrategyProfile = max(cglf.strategy_profiles, key=lambda x:x.social_utility)
+        equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
+        social_optima: float = optimal_profile.social_utility
+        if int(equilibrium_profile.social_utility) != 0:
+            price_of_anarchy = social_optima / equilibrium_profile.social_utility
+            #print(f'Price of Anarchy: {social_optima / equilibrium_profile.social_utility}')
+            return (benefit, initial_cost, price_of_anarchy)
+        else:
+            #print(f'Equilibrium utility: {equilibrium_profile.social_utility}')
+            return (benefit, initial_cost, 0)
+        
+    except:
+        print("Enter value in correct data type")
 """ for player in range(2, 11):
     print(price_of_anarchy_v1(player,2,100,1,1)) """
 
 # dataset_1_1 = [[price_of_anarchy_v1_1(2,2,benefit,cost,1) for benefit in range(0,101, 10)] for cost in range(0,11)]
+print(price_of_anarchy_v1_1())
 
 def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start_probability):
     if not validation(num_players, num_resources, benefit, start_cost):
         return False
+
+    print(f'Num of players: {num_players}')
+    print(f'Num of resources: {num_resources}')
+    print(f'Initial benefit: {benefit}')
+    print(f'Initial cost: {cost}')
+    print(f'Initial failure probability: {start_probability}')
+
     players = dict()
     initial_benefit = benefit
     initial_cost = start_cost
@@ -133,7 +166,8 @@ def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start
         return None
 
 #dataset_1_2 = [[price_of_anarchy_v1_2(player,resource,100,1,1) for resource in range(2,5)] for player in range(2,5)]
-print(price_of_anarchy_v1_2(4,4,100,1,1))
+#enter_variables()
+#print(price_of_anarchy_v1_2(4,4,100,1,1))
 
 def check_algorithm(num_players, num_resources, benefit, start_cost, start_probability):
     if not validation(num_players, num_resources, benefit, start_cost):
