@@ -71,8 +71,7 @@ def price_of_anarchy_v1_1(num_players, num_resources, benefit, start_cost, start
 """ for player in range(2, 11):
     print(price_of_anarchy_v1(player,2,100,1,1)) """
 
-dataset_1_1 = [[price_of_anarchy_v1_1(2,2,benefit,cost,1) for benefit in range(0,101, 10)] for cost in range(0,11)]
-print(dataset_1_1)
+# dataset_1_1 = [[price_of_anarchy_v1_1(2,2,benefit,cost,1) for benefit in range(0,101, 10)] for cost in range(0,11)]
 
 def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start_probability):
     players = dict()
@@ -136,7 +135,7 @@ def check_algorithm(num_players, num_resources, benefit, start_cost, start_proba
     equilibrium_profile.display_result()
     
 
-#check_algorithm(5, 5, 100,1,1)
+# check_algorithm(4, 4, 100,1,1)
 
 def export_excel_2d(data):
     wb = openpyxl.Workbook()
@@ -153,7 +152,7 @@ def export_excel_2d(data):
 
     wb.save('test.xlsx')
 
-def graph(data):
+""" def graph(data):
     tX = []
     tY = []
     tz = []
@@ -172,17 +171,12 @@ def graph(data):
     ax.set_xlabel('x', size=15, color='black')
     ax.set_ylabel('y', size=15, color='black')
     ax.set_zlabel('z', size=15, color='black')
-
-    """ x = y = np.arange(-3,3,0.1)
-    X, Y = np.meshgrid(x,y)
-
-    z = np.exp(-(X**2 + Y**2)) """
     print(TX)
 
     ax.plot_wireframe(TX,TY,TZ)
-    plt.show()
+    plt.show() """
 
-graph(dataset_1_1)
+# graph(dataset_1_1)
 
 """ def export_excel_3d(data):
     wb = openpyxl.Workbook()

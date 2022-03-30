@@ -11,13 +11,7 @@ class CGLF():
 
     def __init__(self, players: Dict[int, Player], resources: Dict[int, Resource]):
         self.players = players # key:int, value:Player
-        """ self.players = dict()
-        for i in range(len(players)):
-            self.players[i] = players[i] """
         self.resources = resources # key:int, value:Resource
-        """ self.resources = dict()
-        for i in range(len(resources)):
-            self.resources[i] = resources[i] """
         self.number_of_profiles = 0
         
         self.strategy_set: List[Set[Resource]] = self.set_strategy_set(resources)
@@ -42,7 +36,7 @@ class CGLF():
         for strategy_profile in strategy_profiles:
             self.strategy_profiles.append(StrategyProfile(strategy_profile, self.players, self.resources))
 
-    def get_utility(self):
+    """ def get_utility(self):
         choices = {key: None for key in self.players} # dict key: player, value: player's strategy
         print(f'Choose Player from below')
         players: List[Player] = list(self.players.values())
@@ -74,15 +68,7 @@ class CGLF():
             # print(f'equality: {equality}')
             if set(equality) == {True}:
                 print(f'even: {strategy_profile.even}')
-                return strategy_profile.utilities[target_player]
-
-    def display(self):
-        for sp in self.strategy_profiles:
-            if sp.even != None:
-                print(f'{sp.even}-even')
-                for player in self.players.values():
-                    print(f'Player {player.id}: {sp.utilities[player.id]}')
-                print()
+                return strategy_profile.utilities[target_player] """
 
     def display_all(self):
         for sp in self.strategy_profiles:

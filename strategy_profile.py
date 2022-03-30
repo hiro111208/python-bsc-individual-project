@@ -1,4 +1,3 @@
-# from typing import Optional
 from copy import deepcopy
 
 from player import Player
@@ -11,7 +10,6 @@ class StrategyProfile():
         self.strategies = strategies # key: player id, value: a set of int(resource id)
         self.players = players
         self.resources = resources
-        #self.congestion = None # key: resource_id, value: int
         self.utilities: Dict[int, float] = dict() # key: player_id, value: float
         self.congestion = self.get_congestion(self.strategies) # key: int(resource id), value: int
         self.even = self.check_even()
@@ -27,17 +25,17 @@ class StrategyProfile():
         else:
             return None
 
-    def get_utilities(self):
+    def get_utilities(self) -> Dict[int, float]:
         return self.utilities
 
-    def get_strategies(self):
+    def get_strategies(self) -> Dict[int, Set[int]]:
         return self.strategies
 
     def get_utility(self, player_id) -> float:
         # exception handling
         return self.utilities[player_id]
 
-    def get_congestion(self, strategies):
+    def get_congestion(self, strategies: Dict[int, Set[int]]) -> Dict[int, int]:
         congestion = {key: 0 for key in self.resources.keys()} # key: resource, value: int
         for strategy in strategies.values():
             for resource in strategy:
@@ -53,11 +51,7 @@ class StrategyProfile():
         new_congestion = self.get_congestion(new_strategies)
         return self.calculate_utility(player_id, strategy, new_congestion) > self.utilities[player_id]
 
-    def calculate_utilities(self):
-        for player_id, strategy in self.strategies.items():
-            self.utilities[player_id] = self.calculate_utility(player_id, strategy, self.congestion)
-
-    def calculate_utility(self, player, strategy, congestion):
+    def calculate_utility(self, player, strategy, congestion) -> float:
         probability_product = 1 # if player didnt choose any resource, failure probability = 1
         total_cost = 0
         for resource in strategy:
@@ -67,17 +61,20 @@ class StrategyProfile():
             total_cost += cost
         return self.players[player].get_benefit()*(1-probability_product) - total_cost
 
+    def calculate_utilities(self):
+        for player_id, strategy in self.strategies.items():
+            self.utilities[player_id] = self.calculate_utility(player_id, strategy, self.congestion)
+
     def display_result(self):
         print(f'Number of players: {len(self.players.keys())}')
         print(f'Social Utility: {self.social_utility}')
         print(f'Resource Cost: {self.resources[1].costs}')
         print(f'Resource Failure Probability: {self.resources[1].failure_probabilities}')
+        print()
         for player in self.players.keys():
             print(f'Player {player}')
             print(f'Benefit: {self.players[player].benefit}')
             print(f'Strategy: {self.strategies[player]}')
             print(f'Utility: {self.utilities[player]}')
             print()
-
-    def display_all_info(self):
-        print(f'{self.strategies}')
+            print()
