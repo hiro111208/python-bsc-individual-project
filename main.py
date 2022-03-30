@@ -75,6 +75,9 @@ def price_of_anarchy_v1_1():
         if num_resources < 2 or num_resources > 10:
             print(f'The number of players must be more than 1 and less than 11.')
             return False
+        if num_players >= 5 and num_resources >= 5:
+            print(f'The number of players and resources cannot be more than 4 at the same time')
+            return False
         benefit = float(input('Enter the value of benefit: '))
         if benefit < 0:
             print(f'Benefit must be non-negative number.')
