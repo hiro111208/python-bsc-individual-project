@@ -1,9 +1,12 @@
 from strategy_profile import StrategyProfile
 from copy import deepcopy
+from typing import Dict, List, Set
+from player import Player
+from resource import Resource
 
 class Equilibrium():
 
-    def __init__(self, players: dict, resources):
+    def __init__(self, players: Dict[int, Player], resources: Dict[int, Resource]):
         self.k = len(players)
         self.xD = dict() # key; int, value; int
         self.xA = dict() # key; int, value; int

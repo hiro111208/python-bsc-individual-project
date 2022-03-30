@@ -124,7 +124,7 @@ def price_of_anarchy_v1_1():
     print(price_of_anarchy_v1(player,2,100,1,1)) """
 
 # dataset_1_1 = [[price_of_anarchy_v1_1(2,2,benefit,cost,1) for benefit in range(0,101, 10)] for cost in range(0,11)]
-print(price_of_anarchy_v1_1())
+# print(price_of_anarchy_v1_1())
 
 def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start_probability):
     if not validation(num_players, num_resources, benefit, start_cost):
@@ -133,7 +133,7 @@ def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start
     print(f'Num of players: {num_players}')
     print(f'Num of resources: {num_resources}')
     print(f'Initial benefit: {benefit}')
-    print(f'Initial cost: {cost}')
+    print(f'Initial cost: {start_cost}')
     print(f'Initial failure probability: {start_probability}')
 
     players = dict()
@@ -170,7 +170,7 @@ def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start
 
 #dataset_1_2 = [[price_of_anarchy_v1_2(player,resource,100,1,1) for resource in range(2,5)] for player in range(2,5)]
 #enter_variables()
-#print(price_of_anarchy_v1_2(4,4,100,1,1))
+print(price_of_anarchy_v1_2(4,4,100,1,1))
 
 def check_algorithm(num_players, num_resources, benefit, start_cost, start_probability):
     if not validation(num_players, num_resources, benefit, start_cost):
