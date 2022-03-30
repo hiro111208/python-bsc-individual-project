@@ -15,9 +15,33 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
-# the number of congestions must be equal to the number of players
+
+def validation(num_players, num_resources, benefit, start_cost):
+    if num_players < 2 or num_players > 10:
+        print(f'The number of players must be more than 1 and less than 11.')
+        return False
+    if num_resources < 2 or num_resources > 10:
+        print(f'The number of players must be more than 1 and less than 11.')
+        return False
+    if benefit < 0:
+        print(f'Benefit must be non-negative number.')
+        return False
+    if start_cost < 0:
+        print(f'Cost must be non-negative number.')
+        return False
+    return True
+
+""" def input():
+    try:
+        player = input('Enter the number of players in integer: ')
+        resource = input('Enter the number of resources in integer: ')
+        benefit = input('Enter the value of benefit: ')
+        cost = input('Enter the value of initial cost for resource: ')
+        fp = input('Enter the value of initial failure probability for resource: ') """
 
 def price_of_anarchy_v0(num_players, num_resources, benefit, start_cost, start_probability):
+    if not validation(num_players, num_resources, benefit, start_cost):
+        return False
     players = dict()
     for i in range(1, num_players + 1):
         players[i] = Player(i, benefit)
@@ -74,6 +98,8 @@ def price_of_anarchy_v1_1(num_players, num_resources, benefit, start_cost, start
 # dataset_1_1 = [[price_of_anarchy_v1_1(2,2,benefit,cost,1) for benefit in range(0,101, 10)] for cost in range(0,11)]
 
 def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start_probability):
+    if not validation(num_players, num_resources, benefit, start_cost):
+        return False
     players = dict()
     initial_benefit = benefit
     initial_cost = start_cost
@@ -106,10 +132,12 @@ def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start
         #return (initial_benefit, initial_cost, None)
         return None
 
-#dataset_1_2 = [[price_of_anarchy_v1_2(player,resource,100,1,1) for resource in range(2,6)] for player in range(2,6)]
-#print(dataset_1_2)
+#dataset_1_2 = [[price_of_anarchy_v1_2(player,resource,100,1,1) for resource in range(2,5)] for player in range(2,5)]
+print(price_of_anarchy_v1_2(4,4,100,1,1))
 
 def check_algorithm(num_players, num_resources, benefit, start_cost, start_probability):
+    if not validation(num_players, num_resources, benefit, start_cost):
+        return False
     players = dict()
     initial_benefit = benefit
     initial_cost = start_cost

@@ -12,12 +12,9 @@ class CGLF():
     def __init__(self, players: Dict[int, Player], resources: Dict[int, Resource]):
         self.players = players # key:int, value:Player
         self.resources = resources # key:int, value:Resource
-        self.number_of_profiles = 0
         
         self.strategy_set: List[Set[Resource]] = self.set_strategy_set(resources)
-        self.strategy_profiles = list()
-
-        self.build_strategy_profiles()
+        self.strategy_profiles: List[StrategyProfile] = self.build_strategy_profiles()
 
     
     def set_strategy_set(self, resources: Dict[int, Resource]) -> List[Set[Resource]]: # strategies that player can choose
@@ -32,9 +29,11 @@ class CGLF():
         for player in self.players.values():
             strategy_sets[player.id] = self.strategy_set
         product = [x for x in itertools.product(*strategy_sets.values())]
-        strategy_profiles = [dict(zip(strategy_sets.keys(), r)) for r in product]
-        for strategy_profile in strategy_profiles:
-            self.strategy_profiles.append(StrategyProfile(strategy_profile, self.players, self.resources))
+        strategies_set = [dict(zip(strategy_sets.keys(), r)) for r in product]
+        strategy_profiles = []
+        for strategies in strategies_set:
+            strategy_profiles.append(StrategyProfile(strategies, self.players, self.resources))
+        return strategy_profiles
 
     """ def get_utility(self):
         choices = {key: None for key in self.players} # dict key: player, value: player's strategy
