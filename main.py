@@ -182,7 +182,7 @@ def check_algorithm(num_players, num_resources, benefit, start_cost, start_proba
     for i in range(1, num_players + 1):
         players[i] = Player(i, benefit)
         #benefit /= 5
-        benefit =  initial_benefit - i ** i
+        benefit =  initial_benefit -  i ** 2
     cost = dict()
     failure_probability = dict()
     for i in range(1, num_players + 1):
