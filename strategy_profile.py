@@ -11,7 +11,13 @@ class StrategyProfile():
         self.players = players
         self.resources = resources
         self.utilities: Dict[int, float] = dict() # key: player_id, value: float
-        self.congestion = self.get_congestion(self.strategies) # key: int(resource id), value: int
+        self.congestion = None
+        self.even = None
+        self.social_utility = None
+        self.update_profile()
+
+    def update_profile(self):
+        self.congestion = self.get_congestion(self.strategies)
         self.even = self.check_even()
         self.calculate_utilities()
         self.social_utility = sum(self.utilities.values())

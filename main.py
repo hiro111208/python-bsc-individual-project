@@ -170,7 +170,7 @@ def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start
 
 #dataset_1_2 = [[price_of_anarchy_v1_2(player,resource,100,1,1) for resource in range(2,5)] for player in range(2,5)]
 #enter_variables()
-print(price_of_anarchy_v1_2(4,4,100,1,1))
+#print(price_of_anarchy_v1_2(4,4,100,1,1))
 
 def check_algorithm(num_players, num_resources, benefit, start_cost, start_probability):
     if not validation(num_players, num_resources, benefit, start_cost):
@@ -182,7 +182,7 @@ def check_algorithm(num_players, num_resources, benefit, start_cost, start_proba
     for i in range(1, num_players + 1):
         players[i] = Player(i, benefit)
         #benefit /= 5
-        benefit = i ** i + initial_benefit
+        benefit =  initial_benefit - i ** i
     cost = dict()
     failure_probability = dict()
     for i in range(1, num_players + 1):
@@ -195,12 +195,15 @@ def check_algorithm(num_players, num_resources, benefit, start_cost, start_proba
         resources[i] = Resource(i, cost, failure_probability)
     cglf = CGLF(players, resources)
     optimal_profile: StrategyProfile = max(cglf.strategy_profiles, key=lambda x:x.social_utility)
-    #cglf.display_all()
+    cglf.display_all()
     equilibrium_profile: StrategyProfile = Equilibrium(players, resources).profile
     equilibrium_profile.display_result()
     
 
-# check_algorithm(4, 4, 100,1,1)
+# check_algorithm(8, 2, 10,1,1) finish at step4 worked probably correctly
+check_algorithm(2, 3, 100,3,1)
+""" for i in range(2,11):
+    check_algorithm(i, 2, 10,1,1) """
 
 def export_excel_2d(data):
     wb = openpyxl.Workbook()

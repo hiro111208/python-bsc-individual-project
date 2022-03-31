@@ -41,7 +41,7 @@ class Equilibrium():
         if self.calculate_marginal_benefit(player, len(self.players), len(self.resources)-1) >= self.calculate_marginal_cost(len(self.players)): # player with the lowest benefit
             #print(f'Found equilibrium')
             #self.profile = StrategyProfile({key:self.resources.keys() for key in self.players.keys()}, self.players, self.resources)
-            return StrategyProfile({key:self.resources.keys() for key in self.players.keys()}, self.players, self.resources)
+            return StrategyProfile({key:set(self.resources.keys()) for key in self.players.keys()}, self.players, self.resources)
         else:
             self.k -= 1
             return self.step1()
@@ -119,6 +119,9 @@ class Equilibrium():
         return StrategyProfile(strategies, self.players, self.resources)
 
     def step5(self): # needs research in the same way as step4, profile is k*-even D-stable not A-stable
+        print(f'step5 executed')
+
+        # something wrong in this loop
         for player in self.players.values():
             X = []
             for x in range(1, len(self.resources) + 1):
@@ -128,12 +131,15 @@ class Equilibrium():
                 self.x[player.id] = 0
             else:
                 self.x[player.id] = max(X)
+        print(f'xi: {self.x}')
+        print(f'k: {self.k}')
         resource_index = 1
         strategies = {key:set() for key in self.players.keys()}
         for i in range(1, len(self.players) + 1):
-
-            if self.k * len(self.resources) - self.sigma(1, i - 1, strategies) > 0:
-                r = min([self.x[i], self.k * len(self.resources) - self.sigma(1, i - 1, strategies)])
+            delta = self.k * len(self.resources) - self.sigma(1, i - 1, strategies)
+            print(f'delta for player {i}: {delta}')
+            if delta > 0:
+                r = min([self.x[i], delta])
                 strategy = set()
                 if resource_index == 0:
                     resource_index = len(self.resources)
@@ -143,12 +149,14 @@ class Equilibrium():
                     strategy.add(resource_index)
                     resource_index = (resource_index + 1) % len(self.resources)
                     r -= 1
-                strategies[player.id] = strategy # needs to be fixed to link strategy and player
+                strategies[i] = strategy # needs to be fixed to link strategy and player
             else:
-                strategies[player.id] = set() # needs to be fixed to link strategy and player
+                strategies[i] = set() # needs to be fixed to link strategy and player
+        print(f'strategies: {strategies}')
         return self.step6(StrategyProfile(strategies, self.players, self.resources))
 
     def step6(self, strategy_profile): # done
+        print(f'step6 executed')
         # a_move_players = []
         a_move_resources = dict() # M(sigma)
         for player in self.players.values():
@@ -171,6 +179,7 @@ class Equilibrium():
             return self.step7(strategy_profile, a_move_resources)
 
     def step7(self, strategy_profile, a_move_resources): # done
+        print(f'step7 executed')
         a_move_player, light_resource_a = min(a_move_resources.items(), key=lambda x: x[1])
         #print(f'a_move_player: {a_move_player}')
         #print(f'light_resource_a: {light_resource_a}')
@@ -179,6 +188,7 @@ class Equilibrium():
             # one step addition
             # strategy_profile.strategies[a_move_player] = strategies[a_move_player].update({light_resource_a})
             strategy_profile.strategies[a_move_player].update({light_resource_a})
+            print(f'resource allocated to player {a_move_player} in if')
             #print(f'a* resource added')
         else:
             # two step addition
@@ -196,8 +206,11 @@ class Equilibrium():
             """ if player_j == None:
                 #print(f'player j not found') """
             strategy_profile.strategies[a_move_player].update({light_resource_a})
+            print(f'resource allocated to player {a_move_player} in else')
             strategy_profile.strategies[player_j].difference_update({light_resource_a})
+            print(f'resource taken from player {player_j} in else')
             strategy_profile.strategies[player_j].update({light_resource_b})
+            print(f'resource allocated to player {player_j} in else')
             #print(f'a* and b* resource added')
         #except:
             #print(f'something went wrong')
@@ -205,5 +218,5 @@ class Equilibrium():
             #print(f'light_resource_b; {light_resource_b}')
             #print(str(([f'key: {key}, value: {strategy_profile.strategies[key]}' for key, value in strategy_profile.strategies.items() if light_resource_a in value])))
             
-        strategy_profile.update_congestion()
+        strategy_profile.update_profile()
         return self.step6(strategy_profile)

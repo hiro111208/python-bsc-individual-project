@@ -24,7 +24,7 @@ class CGLF():
                 strategy_set.append(set(list(strategy)))
         return strategy_set
 
-    def build_strategy_profiles(self):
+    def build_strategy_profiles(self) -> List[StrategyProfile]:
         strategy_sets = dict()
         for player in self.players.values():
             strategy_sets[player.id] = self.strategy_set
