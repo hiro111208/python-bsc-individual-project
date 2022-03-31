@@ -5,8 +5,8 @@ from equilibrium import Equilibrium
 
 class EquilibriumTest(TestCase):
     def setUp(self):
-        player1 = Player(1,1.1)
-        player2 = Player(2,4)
+        player1 = Player(1,4)
+        player2 = Player(2,1.1)
         self.players = {player1.id:player1,player2.id:player2}
         cost = {1:1,2:2}
         failure_probability = {1:0.01,2:0.26}
@@ -20,13 +20,12 @@ class EquilibriumTest(TestCase):
         expected = 2.96 + 0.089
         self.assertEqual(result.social_utility, expected)
 
-    def test_sigma(self):
+    def test_sigma_1(self):
         start = 1
         end = 0
         d = {1:{1,2,3},2:{4,5},3:{1}}
         result = self.equilibrium.sigma(start, end, d)
         self.assertEqual(result, 0)
-
 
     def tearDown(self):
         del self.equilibrium

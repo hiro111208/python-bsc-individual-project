@@ -41,7 +41,6 @@ class CGLFTest(TestCase):
                     StrategyProfile({1:{1}, 2:{1,2}}, self.players, self.resources).social_utility,
                     StrategyProfile({1:{2}, 2:{1,2}}, self.players, self.resources).social_utility,
                     StrategyProfile({1:{1,2}, 2:{1,2}}, self.players, self.resources).social_utility}
-
         self.assertEqual(result, expected)
 
 

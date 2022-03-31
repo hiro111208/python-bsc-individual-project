@@ -1,4 +1,4 @@
-from typing import Dict
+""" from typing import Dict
 class Cost():
 
     def __init__(self, costs:Dict[int, float]):
@@ -20,4 +20,4 @@ class Cost():
         except IndexError:
             self.costs.insert(key, value)
         except TypeError:
-            print("Enter a valid number")
+            print("Enter a valid number") """

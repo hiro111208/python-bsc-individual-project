@@ -1,4 +1,4 @@
-class FailureProbability():
+""" class FailureProbability():
 
     def __init__(self, failure_probabilities):
         #self.failure_probabilities = list() # should be dict of int key and float value
@@ -19,4 +19,4 @@ class FailureProbability():
         except IndexError:
             self.failure_probabilities.insert(key, value)
         except TypeError:
-            print("Enter a valid number")
+            print("Enter a valid number") """
