@@ -34,7 +34,7 @@ class StrategyProfileTest(TestCase):
     def test_calculate_utility(self):
         result = self.profile.calculate_utility(self.profile.players[2].id, self.profile.strategies[2], self.profile.congestion)
         expected = 4 * (1 - 0.01 * 0.26) - (1 + 2)
-        percentage_difference = abs((result - expected) / expected)
+        #percentage_difference = abs((result - expected) / expected)
         #self.assertGreater(0.00001, percentage_difference)
         self.assertEqual(result, expected)
 

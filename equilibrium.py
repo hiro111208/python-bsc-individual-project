@@ -143,76 +143,30 @@ class Equilibrium():
         return self.step6(StrategyProfile(strategies, self.players, self.resources))
 
     def step6(self, strategy_profile): # done
-        print(f'step6 executed')
-        print(f'k = {self.k}')
-        print(f'congestion: {strategy_profile.congestion}')
         a_move_resources = dict() # M(sigma)
         for player in self.players.values():
-            print()
-            """ tmp_congestion = deepcopy(strategy_profile.congestion)
-            for resource_id in strategies[player.id]:
-                del tmp_congestion[resource_id] """
-            #self.e[player.id] = min(tmp_congestion, key=tmp_congestion.get)
             option = {key:value for key, value in strategy_profile.congestion.items() if not key in strategy_profile.strategies[player.id]}
             light_resource = None
             if len(option) > 0:
-                light_resource = min(option, key=option.get) # option must be dict
+                light_resource = min(option, key=option.get)
             new_strategy = deepcopy(strategy_profile.strategies[player.id])
             new_strategy.add(light_resource)
-            #new_strategy.add(self.e[player.id])
             if light_resource != None and strategy_profile.simulate_change(new_strategy, player.id):
-                #a_move_players.append(player)
-                #a_move_resources.append(light_resource)
                 a_move_resources[player.id] = light_resource
-            """ if strategy_profile.simulate_change(new_strategy, player.id):
-                a_move_players.append(player.id) """
         if len(a_move_resources) == 0:
-        #if len(self.a_move_players) == 0:
-            # the profile is confirmed to be A-stable
-            #self.profile = strategy_profile
             return strategy_profile
         else:
             return self.step7(strategy_profile, a_move_resources)
-            #return self.step7(strategy_profile, self.a_move_players)
 
-    def step7(self, strategy_profile, a_move_resources): # done
-        print(f'step7 executed')
+    def step7(self, strategy_profile, a_move_resources):
         a_move_player, light_resource_a = min(a_move_resources.items(), key=lambda x: x[1])
-        #print(f'a_move_player: {a_move_player}')
         
         if light_resource_a == min(strategy_profile.congestion.items(), key=lambda x: x[1])[0]:
-            # one step addition
-            # strategy_profile.strategies[a_move_player] = strategies[a_move_player].update({light_resource_a})
             strategy_profile.strategies[a_move_player].update({light_resource_a})
-            #print(f'resource allocated to player {a_move_player} in if')
-            #print(f'a* resource added')
         else:
-            # two step addition
-            #print(f'entered two-step addition')
-            #print(f'trying')
             light_resource_b = min(strategy_profile.congestion, key=strategy_profile.congestion.get)
-            """ if len([key for key, value in strategy_profile.strategies.items() if (light_resource_a in value)]) > 0:
-                #print(f'a: {light_resource_a}')
-                #print(f'b: {light_resource_b}')
-                #print(f'players haveing resource a, not b')
-            else:
-                #print(f'it wasnt') """
-        #try:
             player_j = [key for key, value in strategy_profile.strategies.items() if light_resource_a in value and not light_resource_b in value][0]
-            """ if player_j == None:
-                #print(f'player j not found') """
             strategy_profile.strategies[a_move_player].update({light_resource_a})
-            #print(f'resource allocated to player {a_move_player} in else')
-            #strategy_profile.strategies[player_j].difference_update({light_resource_a})
-            #print(f'resource taken from player {player_j} in else')
             strategy_profile.strategies[player_j].update({light_resource_b})
-            #print(f'resource allocated to player {player_j} in else')
-            print(f'a* and b* resource added')
-        #except:
-            #print(f'something went wrong')
-            #print(f'light_resource_a; {light_resource_a}')
-            #print(f'light_resource_b; {light_resource_b}')
-            #print(str(([f'key: {key}, value: {strategy_profile.strategies[key]}' for key, value in strategy_profile.strategies.items() if light_resource_a in value])))
-            
         strategy_profile.update_profile()
         return self.step6(strategy_profile)
