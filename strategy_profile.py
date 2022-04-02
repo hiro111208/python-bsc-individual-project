@@ -7,13 +7,13 @@ from typing import Dict, Set
 
 class StrategyProfile():
     def __init__(self, strategies: Dict[int, Set[int]], players: Dict[int, Player], resources: Dict[int, Resource]):
-        self.strategies = strategies # key: player id, value: a set of int(resource id)
-        self.players = players
-        self.resources = resources
+        self.strategies: Dict[int, Set[int]] = strategies # key: player id, value: a set of int(resource id)
+        self.players: Dict[int, Player] = players
+        self.resources: Dict[int, Resource] = resources
         self.utilities: Dict[int, float] = dict() # key: player_id, value: float
-        self.congestion = None
-        self.even = None
-        self.social_utility = None
+        self.congestion: Dict[int, int] = None
+        self.even: int = None
+        self.social_utility: float = None
         self.update_profile()
 
     def update_profile(self):
