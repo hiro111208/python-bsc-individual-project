@@ -19,6 +19,15 @@ class CGLF():
 
     
     def set_strategy_set(self, resources: Dict[int, Resource]) -> List[Set[Resource]]: # strategies that player can choose
+        """
+        Carry out value iteration after assigning rewards to each state and resetting utlities to each state 0
+        
+        Parameters
+        ----------
+        state : instance
+            state of the environment of pacman game
+        """
+
         strategy_set = []
         for i in range(len(resources)+1):
             for strategy in itertools.combinations(resources, i):
@@ -26,6 +35,20 @@ class CGLF():
         return strategy_set
 
     def build_strategy_profiles(self) -> List[StrategyProfile]:
+        """
+        Find neighbours of cell that are not wall
+        
+        Parameters
+        ----------
+        cell : (int, int)
+            a central cell
+        
+        Returns
+        -------
+        neighbours : list of Actions
+            legal actions
+        """
+        
         strategy_sets = dict()
         for player in self.players.values():
             strategy_sets[player.get_id()] = self.__strategy_set
