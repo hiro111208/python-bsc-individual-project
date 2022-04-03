@@ -107,7 +107,7 @@ def price_of_anarchy_v1_1():
         for i in range(1, num_resources + 1):
             resources[i] = Resource(i, cost, failure_probability)
         cglf = CGLF(players, resources)
-        optimal_profile: StrategyProfile = max(cglf.get_strategy_profiles(), key=lambda x:x.get_social_utility())
+        optimal_profile: StrategyProfile = cglf.get_optimal_profile()
         equilibrium_profile: StrategyProfile = Equilibrium(players, resources).get_equilibrium_profile()
         social_optima: float = optimal_profile.get_social_utility()
         if int(equilibrium_profile.get_social_utility()) != 0:
@@ -149,11 +149,12 @@ def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start
     cost = dict()
     for i in range(1, num_players + 1):
         cost[i] = i * (start_cost + 1)
+        #cost[i] = i * (start_cost)
     resources: Dict[int, Resource] = dict()
     for i in range(1, num_resources + 1):
         resources[i] = Resource(i, cost, failure_probability)
     cglf = CGLF(players, resources)
-    optimal_profile: StrategyProfile = max(cglf.get_strategy_profiles(), key=lambda x:x.get_social_utility())
+    optimal_profile: StrategyProfile = cglf.get_optimal_profile()
     equilibrium_profile: StrategyProfile = Equilibrium(players, resources).get_equilibrium_profile()
     social_optima: float = optimal_profile.get_social_utility()
     if int(equilibrium_profile.get_social_utility()) != 0:
@@ -166,7 +167,7 @@ def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start
         #return (initial_benefit, initial_cost, None)
         return None
 
-#dataset_1_2 = [[price_of_anarchy_v1_2(player,resource,100,5,5) for resource in range(2,5)] for player in range(2,5)]
+dataset_1_2 = [[price_of_anarchy_v1_2(4,4,benefit,cost,5) for benefit in range(70,171,10)] for cost in range(0,11)]
 #enter_variables()
 #print(price_of_anarchy_v1_2(4,4,100,1,1))
 
@@ -192,7 +193,7 @@ def check_algorithm(num_players, num_resources, benefit, start_cost, start_proba
     for i in range(1, num_resources + 1):
         resources[i] = Resource(i, cost, failure_probability)
     cglf = CGLF(players, resources)
-    optimal_profile: StrategyProfile = max(cglf.get_strategy_profiles(), key=lambda x:x.get_social_utility())
+    optimal_profile: StrategyProfile = cglf.get_optimal_profile()
     optimal_profile.display_result()
     #cglf.display_all()
     equilibrium_profile: StrategyProfile = Equilibrium(players, resources).get_equilibrium_profile()
@@ -200,8 +201,8 @@ def check_algorithm(num_players, num_resources, benefit, start_cost, start_proba
     print(optimal_profile.get_social_utility()/equilibrium_profile.get_social_utility())
     
 
-check_algorithm(3, 5, 100,5,5) #finish at step4 worked probably correctly
-#check_algorithm(4, 4, 100,8,10)
+#check_algorithm(3, 5, 100,5,5) #finish at step4 worked probably correctly
+#check_algorithm(4, 4, 70,10,5)
 """ for i in range(2,11):
     check_algorithm(i, 2, 10,1,1) """
 
@@ -261,4 +262,4 @@ def export_excel_2d(data):
 
     wb.save('test.xlsx') """
 
-#export_excel_2d(dataset_1_2)
+export_excel_2d(dataset_1_2)

@@ -15,6 +15,7 @@ class CGLF():
         
         self.__strategy_set: List[Set[Resource]] = self.set_strategy_set(resources)
         self.__strategy_profiles: List[StrategyProfile] = self.build_strategy_profiles()
+        self.__optimal_profile = max(self.__strategy_profiles, key=lambda x:x.get_social_utility())
 
     
     def set_strategy_set(self, resources: Dict[int, Resource]) -> List[Set[Resource]]: # strategies that player can choose
@@ -37,6 +38,9 @@ class CGLF():
 
     def get_strategy_profiles(self) -> List[StrategyProfile]:
         return self.__strategy_profiles
+
+    def get_optimal_profile(self) -> StrategyProfile:
+        return self.__optimal_profile
 
     """ def get_utility(self):
         choices = {key: None for key in self.players} # dict key: player, value: player's strategy

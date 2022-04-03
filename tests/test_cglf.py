@@ -21,6 +21,10 @@ class CGLFTest(TestCase):
         expected = [set(), {1}, {2}, {1,2}]
         self.assertEqual(result, expected)
 
+    def test_get_optimal_profile(self):
+        result = result = self.cglf.get_optimal_profile().get_social_utility()
+        expected = StrategyProfile({1:{1}, 2:{2}}, self.players, self.resources).get_social_utility()
+
     # Since eac
     def test_build_strategy_profiles(self):
         profiles = self.cglf.build_strategy_profiles()
