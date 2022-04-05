@@ -4,12 +4,10 @@ from cglf import CGLF
 from equilibrium import Equilibrium
 from strategy_profile import StrategyProfile
 import random
+from typing import Dict
 
 import openpyxl
 
-from typing import Dict
-
-from copy import deepcopy
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -126,7 +124,40 @@ def price_of_anarchy_v1_1():
 # dataset_1_1 = [[price_of_anarchy_v1_1(2,2,benefit,cost,1) for benefit in range(0,101, 10)] for cost in range(0,11)]
 # print(price_of_anarchy_v1_1())
 
+def set_parameters():
+    parameters = {1:"The number of players",2: "The number of resources",3: "Player's benefit",4:"Initial resource cost",5:"Initial resource failure probability"}
+    chosen = dict()
+    counter = 2
+    while counter > 0:
+        print("Choose parameters below:")
+        for key, value in parameters.items():
+            print(f'{key}: {value}')
+        chosen_index = input()
+        try:
+            index = int(chosen_index)
+            if index in parameters.keys():
+                chosen[index] = parameters.pop(index)
+            else:
+                print("Choose the number in the option")
+        except:
+            print("Enter valid input")
+
+
 def price_of_anarchy_v1_2(num_players, num_resources, benefit, start_cost, start_probability):
+    """
+        Create a strategy set given resources
+        
+        Parameters
+        ----------
+        resources : Dict[int, Resource]
+            a set of resources to be used by players in a game
+
+        Returns
+        -------
+        strategy_set : List[Set[Resource]]
+            strategy set
+        """
+
     if not validation(num_players, num_resources, benefit, start_cost):
         return False
 
@@ -172,6 +203,20 @@ dataset_1_2 = [[price_of_anarchy_v1_2(4,4,benefit,cost,5) for benefit in range(7
 #print(price_of_anarchy_v1_2(4,4,100,1,1))
 
 def check_algorithm(num_players, num_resources, benefit, start_cost, start_probability):
+    """
+        Create a strategy set given resources
+        
+        Parameters
+        ----------
+        resources : Dict[int, Resource]
+            a set of resources to be used by players in a game
+
+        Returns
+        -------
+        strategy_set : List[Set[Resource]]
+            strategy set
+        """
+
     if not validation(num_players, num_resources, benefit, start_cost):
         return False
     players = dict()
@@ -207,6 +252,20 @@ def check_algorithm(num_players, num_resources, benefit, start_cost, start_proba
     check_algorithm(i, 2, 10,1,1) """
 
 def export_excel_2d(data):
+    """
+        Create a strategy set given resources
+        
+        Parameters
+        ----------
+        resources : Dict[int, Resource]
+            a set of resources to be used by players in a game
+
+        Returns
+        -------
+        strategy_set : List[Set[Resource]]
+            strategy set
+        """
+
     wb = openpyxl.Workbook()
 
     # Check Sheet
