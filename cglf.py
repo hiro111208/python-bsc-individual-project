@@ -49,7 +49,7 @@ class CGLF():
                 strategy_set.append(set(list(strategy)))
         return strategy_set
 
-        # Code modified from https://qiita.com/mSpring/items/c4973ea214a36c4a699c
+    # Code modified from https://qiita.com/mSpring/items/c4973ea214a36c4a699c
     def build_strategy_profiles(self) -> List[StrategyProfile]:
         """
         Create strategy profiles given players and resources
