@@ -4,6 +4,7 @@ from typing import Dict, List, Set
 from player import Player
 from resource import Resource
 
+# Code modified from the algorithm obtained from https://doi.org/10.1016/j.geb.2009.03.004
 class Equilibrium():
 
     def __init__(self, players: Dict[int, Player], resources: Dict[int, Resource]):

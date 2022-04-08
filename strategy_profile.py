@@ -7,7 +7,6 @@ from typing import Dict, Set
 
 class StrategyProfile():
 
-    # Consructor: this gets run when main.py is invoked
     def __init__(self, strategies: Dict[int, Set[int]], players: Dict[int, Player], resources: Dict[int, Resource]):
         """
         Constructor that gets run when CGLF class construct strategy profiles or equilibrium profile is constructed
@@ -25,7 +24,7 @@ class StrategyProfile():
         self.__players: Dict[int, Player] = players
         self.__resources: Dict[int, Resource] = resources
         self.__utilities: Dict[int, float] = dict() # key: player_id, value: float
-        self.__congestion: Dict[int, int] = None
+        self.__congestion: Dict[int, int] = dict()
         self.__even: int = None
         self.__social_utility: float = None
         self.update_profile()
@@ -188,7 +187,7 @@ class StrategyProfile():
             player's utility
         """
 
-        probability_product = 1 # if player didnt choose any resource, failure probability = 1
+        probability_product = 1 # if player didn't choose any resource, failure probability = 1
         total_cost = 0
         for resource in strategy:
             failure_probability = self.__resources[resource].get_failure_probability(congestion[resource])

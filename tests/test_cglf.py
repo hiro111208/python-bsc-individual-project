@@ -25,7 +25,6 @@ class CGLFTest(TestCase):
         result = result = self.cglf.get_optimal_profile().get_social_utility()
         expected = StrategyProfile({1:{1}, 2:{2}}, self.players, self.resources).get_social_utility()
 
-    # Since eac
     def test_build_strategy_profiles(self):
         profiles = self.cglf.build_strategy_profiles()
         result = {profile.get_social_utility() for profile in profiles}

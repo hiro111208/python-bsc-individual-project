@@ -1,6 +1,5 @@
 class Player():
 
-    # Consructor: this gets run when main.py is invoked
     def __init__(self, player_id: int, benefit: float):
         """
         Constructor that gets run when main.py is invoked
@@ -14,7 +13,7 @@ class Player():
             player's benefit
         """
 
-        self.__id = player_id # primary key int
+        self.__id = player_id
         self.__benefit = benefit
 
     def get_id(self) -> int:

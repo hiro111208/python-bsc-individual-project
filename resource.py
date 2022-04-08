@@ -1,11 +1,7 @@
-import failure_probability
-import cost
-
 from typing import Dict
 
 class Resource():
 
-    # Consructor: this gets run when main.py is invoked
     def __init__(self, resource_id: int, cost: Dict[int, float], failure_probability: Dict[int, float]):
         """
         Constructor that gets run when main.py is invoked

@@ -20,15 +20,15 @@ class CGLF():
             a set of resources to be used by players in a game
         """
 
-        self.players: Dict[int, Player] = players # key:int, value:Player
-        self.resources: Dict[int, Resource] = resources # key:int, value:Resource
+        self.players: Dict[int, Player] = players
+        self.resources: Dict[int, Resource] = resources
         
         self.__strategy_set: List[Set[Resource]] = self.set_strategy_set(resources)
         self.__strategy_profiles: List[StrategyProfile] = self.build_strategy_profiles()
         self.__optimal_profile: StrategyProfile = max(self.__strategy_profiles, key=lambda x:x.get_social_utility())
 
     
-    def set_strategy_set(self, resources: Dict[int, Resource]) -> List[Set[Resource]]: # strategies that player can choose
+    def set_strategy_set(self, resources: Dict[int, Resource]) -> List[Set[Resource]]:
         """
         Create a strategy set given resources
         
@@ -49,6 +49,7 @@ class CGLF():
                 strategy_set.append(set(list(strategy)))
         return strategy_set
 
+        # Code modified from https://qiita.com/mSpring/items/c4973ea214a36c4a699c
     def build_strategy_profiles(self) -> List[StrategyProfile]:
         """
         Create strategy profiles given players and resources
