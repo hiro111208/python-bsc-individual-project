@@ -1,6 +1,8 @@
 # 6CCS3PRJ
 Individual project of BSc Computer Science at King's College London
 
+The algorithm implemented in this project is based on the paper "Congestion games with load-dependent failures: identical resources".
+
 In order to execute the system, users must have a Python3 environment in their computer and be in the software directory on command line. If users wish to obtain different data, they must be familiar with the basic operations of the Python language, especially the use of for loops.
 
 ## Executing the Generation of Data
